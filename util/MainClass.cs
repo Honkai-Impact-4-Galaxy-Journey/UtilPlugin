@@ -14,8 +14,8 @@ namespace util
 {
     public class PluginConfig : IConfig
     {
-        public bool IsEnabled { get; set; }
-        public bool Debug { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsEnabled { get; set; } = true;
+        public bool Debug { get; set; }
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
