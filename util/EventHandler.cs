@@ -7,45 +7,53 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MEC;
+using Exiled.API.Features;
 
 namespace util
 {
-    public static class EventHandler
+    public class EventHandler
     {
+        private static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
         {
             if (value)
             {
                 Exiled.Events.Handlers.Server.RoundStarted += Cleanup;
-                Exiled.Events.Handlers.Server.RoundEnded += Stopcleanup;
+                Exiled.Events.Handlers.Server.RestartingRound += Stopcleanup;
             }
             else
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
-                Exiled.Events.Handlers.Server.RoundEnded -= Stopcleanup;
+                Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
             }
         }
         static bool Flag;
-        private static void Stopcleanup(RoundEndedEventArgs ev)
+        private static void Stopcleanup()
         {
             Flag = false;
         }
 
         public static void Cleanup()
         {
-            Flag = true;
-            while (Flag)
+            
+            float delay = UtilPlugin.Instance.Config.Cleanuptime;
+            if (Flag)
             {
-                Timing.WaitForSeconds(UtilPlugin.Instance.Config.Cleanuptime-10);
-                Server.SendBroadcast("服务器将在60秒后清除掉落物", 10);
-                Timing.WaitForSeconds(10);
-                ServerConsole.EnterCommand("cleanup item");
-            }
-            if (UtilPlugin.Instance.Config.Debug)
-            {
-                Server.SendBroadcast("stop cleanup",5);
+                _cleanupcoroutine = Timing.RunCoroutine(cleanupwaiter(delay));
             }
         }
-        
+        public static IEnumerator<float> cleanupwaiter(float delay)
+        {
+            yield return Timing.WaitForSeconds(20);
+            if (!Flag) {
+                yield break;
+            }
+            PluginAPI.Core.Server.SendBroadcast("服务器将在60秒后清理掉落物和尸体", 10);
+            yield return Timing.WaitForSeconds(15);
+            Exiled.API.Features.Server.RunCommand("cleanup ragdolls");
+            Exiled.API.Features.Server.RunCommand("cleanup items");
+            PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
+            Cleanup();
+        }
     }
 }

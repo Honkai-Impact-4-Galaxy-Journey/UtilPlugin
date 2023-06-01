@@ -16,7 +16,7 @@ namespace util
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; }
-        public int Cleanuptime { get; set; } = 20;
+        public float Cleanuptime { get; set; } = 20;
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
