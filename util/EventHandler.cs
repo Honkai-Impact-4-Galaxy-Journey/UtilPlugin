@@ -35,7 +35,7 @@ namespace util
 
         public static void Cleanup()
         {
-            
+			Flag = true;
             float delay = UtilPlugin.Instance.Config.Cleanuptime;
             if (Flag)
             {
@@ -44,16 +44,18 @@ namespace util
         }
         public static IEnumerator<float> cleanupwaiter(float delay)
         {
-            yield return Timing.WaitForSeconds(20);
-            if (!Flag) {
-                yield break;
-            }
-            PluginAPI.Core.Server.SendBroadcast("服务器将在60秒后清理掉落物和尸体", 10);
-            yield return Timing.WaitForSeconds(15);
-            Exiled.API.Features.Server.RunCommand("cleanup ragdolls");
-            Exiled.API.Features.Server.RunCommand("cleanup items");
-            PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
-            Cleanup();
+            while(Flag)
+			{
+				yield return Timing.WaitForSeconds(20);
+				if (!Flag) {
+					yield break;
+				}
+				PluginAPI.Core.Server.SendBroadcast("服务器将在60秒后清理掉落物和尸体", 10);
+				yield return Timing.WaitForSeconds(15);
+				Exiled.API.Features.Server.RunCommand("cleanup ragdolls");
+				Exiled.API.Features.Server.RunCommand("cleanup items");
+				PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
+			}
         }
     }
 }
