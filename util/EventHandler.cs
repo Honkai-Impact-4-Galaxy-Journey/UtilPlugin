@@ -44,6 +44,10 @@ namespace util
             float delay = UtilPlugin.Instance.Config.Cleanuptime;
             _cleanupcoroutine = Timing.RunCoroutine(cleanupwaiter(delay));
         }
+        public static bool IsSCPitem(ItemType type)
+        {
+            return type == ItemType.SCP330 || type == ItemType.SCP500 || type == ItemType.SCP268 || type == ItemType.SCP244b || type == ItemType.SCP244a || type == ItemType.SCP2176 || type == ItemType.SCP207 || type == ItemType.SCP1853 || type == ItemType.SCP1576 || type == ItemType.SCP018;
+        }
         public static IEnumerator<float> cleanupwaiter(float delay)
         {
             while(Flag)
@@ -54,7 +58,7 @@ namespace util
                 foreach(var a in UnityEngine.Object.FindObjectsOfType<ItemPickupBase>())
                 {
                     Pickup pickup = Pickup.Get(a);
-                    if (!(pickup.Type == ItemType.SCP244a || pickup.Type==ItemType.SCP244b || pickup.Type==ItemType.GrenadeFlash || pickup.Type==ItemType.GrenadeHE || pickup.Type==ItemType.MicroHID || pickup.Type==ItemType.KeycardO5))
+                    if (!(IsSCPitem(pickup.Type) || pickup.Type==ItemType.GrenadeFlash || pickup.Type==ItemType.GrenadeHE || pickup.Type==ItemType.MicroHID || pickup.Type==ItemType.KeycardO5 || pickup.Type==ItemType.KeycardFacilityManager))
                     {
                         pickup.Destroy();
                     }
