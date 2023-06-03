@@ -14,8 +14,10 @@ namespace util
 {
     public class PluginConfig : IConfig
     {
+        [Description("设置是否启用插件")]
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; }
+        [Description("每次自动清理的时间（以秒为单位）")]
         public float Cleanuptime { get; set; } = 300;
     }
     public class UtilPlugin : Plugin<PluginConfig>
