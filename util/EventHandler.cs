@@ -8,6 +8,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using MEC;
 using Exiled.API.Features;
+using Exiled.Events.Commands.Reload;
+using InventorySystem.Items.Pickups;
+using InventorySystem.Items;
+using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
 
 namespace util
 {
@@ -30,31 +35,35 @@ namespace util
         static bool Flag;
         private static void Stopcleanup()
         {
-            Flag = false;
+            Timing.KillCoroutines(_cleanupcoroutine);
         }
 
         public static void Cleanup()
         {
 			Flag = true;
             float delay = UtilPlugin.Instance.Config.Cleanuptime;
-            if (Flag)
-            {
-                _cleanupcoroutine = Timing.RunCoroutine(cleanupwaiter(delay));
-            }
+            _cleanupcoroutine = Timing.RunCoroutine(cleanupwaiter(delay));
         }
         public static IEnumerator<float> cleanupwaiter(float delay)
         {
             while(Flag)
 			{
 				yield return Timing.WaitForSeconds(20);
-				if (!Flag) {
-					yield break;
-				}
 				PluginAPI.Core.Server.SendBroadcast("服务器将在60秒后清理掉落物和尸体", 10);
 				yield return Timing.WaitForSeconds(15);
-				Exiled.API.Features.Server.RunCommand("cleanup ragdolls");
-				Exiled.API.Features.Server.RunCommand("cleanup items");
-				PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
+                foreach(var a in UnityEngine.Object.FindObjectsOfType<ItemPickupBase>())
+                {
+                    Pickup pickup = Pickup.Get(a);
+                    if (!(pickup.Type == ItemType.SCP244a || pickup.Type==ItemType.SCP244b || pickup.Type==ItemType.GrenadeFlash || pickup.Type==ItemType.GrenadeHE || pickup.Type==ItemType.MicroHID || pickup.Type==ItemType.KeycardO5))
+                    {
+                        pickup.Destroy();
+                    }
+                }
+                foreach(var a in UnityEngine.Object.FindObjectsOfType<BasicRagdoll>())
+                {
+                    Ragdoll.Get(a).Destroy();
+                }
+                PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
 			}
         }
     }
