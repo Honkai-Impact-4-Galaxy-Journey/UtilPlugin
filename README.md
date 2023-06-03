@@ -1,3 +1,4 @@
-# util
+# UtilPlugin
 
-添加一些常用指令，以及自动化功能！
+一个基于 [Exiled](https://github.com/Exiled-Team/EXILED) 插件框架的 [SCP:SL](https://scpslgame.com/) 服务器插件
+
