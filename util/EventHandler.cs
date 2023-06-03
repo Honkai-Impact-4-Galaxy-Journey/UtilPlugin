@@ -52,9 +52,9 @@ namespace util
         {
             while(Flag)
 			{
-				yield return Timing.WaitForSeconds(20);
-				PluginAPI.Core.Server.SendBroadcast("服务器将在60秒后清理掉落物和尸体", 10);
-				yield return Timing.WaitForSeconds(15);
+				yield return Timing.WaitForSeconds(delay-30);
+				PluginAPI.Core.Server.SendBroadcast("服务器将在30秒后清理掉落物和尸体", 10);
+				yield return Timing.WaitForSeconds(30);
                 foreach(var a in UnityEngine.Object.FindObjectsOfType<ItemPickupBase>())
                 {
                     Pickup pickup = Pickup.Get(a);
