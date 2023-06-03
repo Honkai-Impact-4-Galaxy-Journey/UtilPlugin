@@ -16,13 +16,20 @@ namespace util
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; }
+        public float Cleanuptime { get; set; } = 300;
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
         public override void OnEnabled()
         {
             base.OnEnabled();
+            EventHandler.Register(true);
             
+        }
+        public static UtilPlugin Instance { get; private set; }
+        public UtilPlugin()
+        {
+            Instance = this;
         }
     }
 }

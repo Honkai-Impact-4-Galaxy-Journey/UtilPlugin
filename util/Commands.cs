@@ -33,17 +33,4 @@ namespace CommandSystem
         }
 
     }
-    public class Vas : ICommand
-    {
-        public string Command => "voteactivatesystem";
-
-        public string[] Aliases => Array.Empty<string>();
-
-        public string Description => throw new NotImplementedException();
-
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }
