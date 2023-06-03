@@ -20,6 +20,7 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get((sender as CommandSender).SenderId);
+            
             if (player.IsDead)
             {
                 response = "你已经死了，想啥呢？";
@@ -33,4 +34,19 @@ namespace CommandSystem
         }
 
     }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class Scp096 : ICommand
+    {
+        public string Command => "scp096";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "79换96";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }
