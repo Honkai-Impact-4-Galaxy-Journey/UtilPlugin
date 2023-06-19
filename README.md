@@ -4,7 +4,7 @@
 
 # 附加条款
 
-（a）您必须以某种形式修改插件的版本号及名称，以示其与原版本不同（根据GPLv3,7(c)）
+（a）您必须以某种形式修改插件的版本号及名称，以示其与原版本不同（根据[GPLv3,7(c)](https://github.com/dargoncat/UtilPlugin/blob/main/LICENSE#L372-L374)）
 
 （b）您不得移除作者在源代码中添加的版权声明（根据GPLv3,7(b)）
 
