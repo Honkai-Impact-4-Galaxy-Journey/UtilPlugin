@@ -1,6 +1,5 @@
 name: "新功能提案"
 description: "对已有功能的大幅度修改，或添加一个新内容或选项"
-labels: [新功能, 新反馈]
 body:
 - type: checkboxes
   id: "yml-1"
@@ -23,7 +22,7 @@ body:
   id: "yml-3"
   attributes:
     label: 原因
-    description: "详细描述你为什么需要这项功能，这有助于开发者评估它的优先度。"
+    description: "详细描述你为什么需要这项功能。"
     value: |
       （示例）
       我需要这个功能来xxxx。很多人都有xxxx的需求，但如果没有这个功能，就不能xxxx了。
