@@ -22,8 +22,5 @@ body:
   attributes:
     label: 重现步骤
     description: "详细描述要怎么操作才能再次触发这个 Bug。"
-    value: |
-      1、点击xxxx
-      2、往下滚，然后点击xxxx
   validations:
     required: true
