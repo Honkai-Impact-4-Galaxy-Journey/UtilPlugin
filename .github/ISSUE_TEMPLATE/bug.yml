@@ -1,0 +1,28 @@
+#来源于PCL2仓库（https://github.com/Hex-Dragon/PCL2）
+name: "Bug 反馈"
+description: "遇见了Bug"
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项"
+    description: "请逐个检查下列项目，并勾选确认。"
+    options:
+    - label: "我确认插件已为最新版，且最新版未修复这一bug。"
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/dargoncat/UtilPlugin/issues?q=is%3Aissue+) 中搜索，确认了这一 Bug 未被提交过。"
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述
+    description: "详细描述该 Bug 的具体表现。"
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 重现步骤
+    description: "详细描述要怎么操作才能再次触发这个 Bug。"
+  validations:
+    required: true
