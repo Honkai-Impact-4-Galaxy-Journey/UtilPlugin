@@ -45,7 +45,7 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            throw new NotImplementedException();
+            Player player = Player.Get((sender as CommandSender).SenderId);          
         }
     }
 
