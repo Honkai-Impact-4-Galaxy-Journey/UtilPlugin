@@ -28,6 +28,9 @@ namespace util
             EventHandler.Register(true);
             
         }
+        public override string Author => "Silver Wolf";
+        public override string Name => "UtilPlugin";
+        public override Version Version => new Version(1,0,2);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {
