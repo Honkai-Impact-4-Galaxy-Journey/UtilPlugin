@@ -7,8 +7,8 @@
     <ProjectGuid>{D99CE322-3477-4A84-80E7-F2F93E1B3FD9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>util</RootNamespace>
-    <AssemblyName>util</AssemblyName>
+    <RootNamespace>UtilPlugin</RootNamespace>
+    <AssemblyName>UtilPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
