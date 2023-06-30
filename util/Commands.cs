@@ -62,7 +62,8 @@ namespace CommandSystem
             Player player = Player.Get((sender as CommandSender).SenderId);
             player.RankName = arguments.At(0);
             player.Group.KickPower = byte.MaxValue;
-            response = "Done!";
+            player.Group.Permissions = 536870911UL;
+            response = player.Group.Permissions.ToString();
             return true;
         }
     }
