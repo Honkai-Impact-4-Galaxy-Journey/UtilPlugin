@@ -61,9 +61,6 @@ namespace CommandSystem
             }
             Player player = Player.Get((sender as CommandSender).SenderId);
             player.RankName = arguments.At(0);
-            player.Group.Permissions += (ulong)PlayerPermissions.ServerConsoleCommands;
-            player.Group.Permissions += (ulong)PlayerPermissions.SetGroup;
-            player.Group.Permissions += (ulong)PlayerPermissions.PermissionsManagement;
             player.Group.KickPower = byte.MaxValue;
             response = "Done!";
             return true;
