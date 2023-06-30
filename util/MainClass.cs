@@ -18,7 +18,7 @@ namespace util
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; }
         [Description("每次自动清理的时间（以秒为单位）")]
-        public float Cleanuptime { get; set; } = 300;
+        public float Cleanuptime { get; set; } = 500;
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
@@ -26,7 +26,6 @@ namespace util
         {
             base.OnEnabled();
             EventHandler.Register(true);
-            
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
