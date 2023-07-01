@@ -14,7 +14,7 @@ using InventorySystem.Items;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 
-namespace util
+namespace UtilPlugin
 {
     public class EventHandler
     {
@@ -30,6 +30,16 @@ namespace util
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
+            }
+            if (UtilPlugin.Instance.Config.SystemWarheadEnabled)
+            {
+                Exiled.Events.Handlers.Server.RoundStarted += SystemWarhead.OnRoundStarted;
+                Exiled.Events.Handlers.Server.RestartingRound += SystemWarhead.OnRoundFinished;
+            }
+            else
+            {
+                Exiled.Events.Handlers.Server.RoundStarted -= SystemWarhead.OnRoundStarted;
+                Exiled.Events.Handlers.Server.RestartingRound -= SystemWarhead.OnRoundFinished;
             }
         }
         static bool Flag;

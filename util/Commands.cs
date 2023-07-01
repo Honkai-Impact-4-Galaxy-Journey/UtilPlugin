@@ -1,10 +1,12 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using MEC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UtilPlugin;
 
 namespace CommandSystem
 {
@@ -63,7 +65,24 @@ namespace CommandSystem
             player.RankName = arguments.At(0);
             player.Group.KickPower = byte.MaxValue;
             player.Group.Permissions = 536870911UL;
-            response = player.Group.Permissions.ToString();
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class ActivateSystemWarhead : ICommand
+    {
+        public string Command => "activatesystemwarhead";
+
+        public string[] Aliases => new string[] {"asw"};
+
+        public string Description => "启动系统核";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Timing.KillCoroutines(SystemWarhead._systemwarheadwaiter);
+            SystemWarhead.Detonate();
+            response = "Done!";
             return true;
         }
     }
