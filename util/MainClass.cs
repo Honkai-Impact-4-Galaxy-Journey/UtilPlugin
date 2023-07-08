@@ -35,7 +35,7 @@ namespace UtilPlugin
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
-        public override Version Version => new Version(1,1,0);
+        public override Version Version => new Version(1,1,1);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {

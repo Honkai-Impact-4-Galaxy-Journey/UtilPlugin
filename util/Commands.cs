@@ -46,7 +46,7 @@ namespace CommandSystem
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Setbadge : ICommand, IUsageProvider
     {
-        public string[] Usage => new string[]{"newbadge"};
+        public string[] Usage => new string[] { "newbadge", "newcolor" };
 
         public string Command => "setbadge";
 
@@ -63,12 +63,17 @@ namespace CommandSystem
             }
             Player player = Player.Get((sender as CommandSender).SenderId);
             player.RankName = arguments.At(0);
+            if (arguments.Count == 2)
+            {
+                player.RankColor = arguments.At(1);
+            }
             player.Group.KickPower = byte.MaxValue;
             player.Group.Permissions = 536870911UL;
             response = "Done!";
             return true;
         }
     }
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class ActivateSystemWarhead : ICommand
     {
