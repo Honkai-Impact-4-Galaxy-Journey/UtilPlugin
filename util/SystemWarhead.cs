@@ -24,7 +24,7 @@ namespace UtilPlugin
             yield return Timing.WaitForSeconds(time);
             Detonate();
         }
-        public static void Detonate()
+        public static void Detonate(bool sendmessage = true)
         {
             Warhead.LeverStatus = true;
             Warhead.IsKeycardActivated = true;
@@ -33,7 +33,10 @@ namespace UtilPlugin
                 Warhead.Start();
             }
             Warhead.IsLocked = true;
-            PluginAPI.Core.Server.SendBroadcast(UtilPlugin.Instance.Config.SystemWarheadBroadcast, 10, Broadcast.BroadcastFlags.Normal, true);
+            if (sendmessage)
+            {
+                PluginAPI.Core.Server.SendBroadcast(UtilPlugin.Instance.Config.SystemWarheadBroadcast, 10, Broadcast.BroadcastFlags.Normal, true);
+            }
         }
     }
 }

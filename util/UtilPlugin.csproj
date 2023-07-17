@@ -130,6 +130,7 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="EventHandler.cs" />
+    <Compile Include="Gamemode.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemWarhead.cs" />
