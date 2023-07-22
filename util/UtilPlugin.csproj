@@ -132,6 +132,7 @@
     <Compile Include="EventHandler.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReserveSlot.cs" />
     <Compile Include="SystemWarhead.cs" />
   </ItemGroup>
   <ItemGroup>

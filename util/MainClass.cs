@@ -25,6 +25,10 @@ namespace UtilPlugin
         public float SysteamWarheadTime { get; set; } = 1200;
         [Description("系统核弹触发时公告")]
         public string SystemWarheadBroadcast { get; set; } = "注意，系统核弹已经启动";
+        [Description("启用管理员预留位")]
+        public bool ReserveSlotEnabled { get; set; } = false;
+        [Description("管理员预留位STEAM64ID")]
+        public List<string> SlotIDs { get; set; } = new List<string> { "example@steam" };
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
@@ -32,10 +36,11 @@ namespace UtilPlugin
         {
             base.OnEnabled();
             EventHandler.Register(true);
+            ReserveSlot.Register(Config.ReserveSlotEnabled);
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
-        public override Version Version => new Version(1,1,1);
+        public override Version Version => new Version(1,1,2);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {
