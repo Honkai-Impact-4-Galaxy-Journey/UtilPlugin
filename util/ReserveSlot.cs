@@ -11,7 +11,7 @@ namespace UtilPlugin
 {
     public class ReserveSlot
     {
-        public static int Remain = UtilPlugin.Instance.Config.SlotIDs.Count;
+        public static int Remain = UtilPlugin.Instance.Config.SlotIds.Count;
         public static void Register(bool reg)
         {
             if (reg)
@@ -24,17 +24,18 @@ namespace UtilPlugin
             {
                 Exiled.Events.Handlers.Player.Joined -= Joining;
                 Exiled.Events.Handlers.Player.Left -= Disconnecting;
+                Exiled.Events.Handlers.Server.RestartingRound -= RoundRestart;
             }
         }
 
         public static void RoundRestart()
         {
-            Remain = UtilPlugin.Instance.Config.SlotIDs.Count;
+            Remain = UtilPlugin.Instance.Config.SlotIds.Count;
         }
 
         public static void Disconnecting(LeftEventArgs ev)
         {
-            if (UtilPlugin.Instance.Config.SlotIDs.Contains(ev.Player.AuthenticationToken))
+            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.AuthenticationToken))
             {
                 Remain++;
             }
@@ -44,7 +45,7 @@ namespace UtilPlugin
         {
             if (Server.PlayerCount >= Server.MaxPlayerCount - Remain)
             {
-                if (UtilPlugin.Instance.Config.SlotIDs.Contains(ev.Player.AuthenticationToken))
+                if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.AuthenticationToken))
                 {
                     Remain--;
                     return;
@@ -55,7 +56,7 @@ namespace UtilPlugin
                     return;
                 }
             }
-            if (UtilPlugin.Instance.Config.SlotIDs.Contains(ev.Player.AuthenticationToken))
+            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.AuthenticationToken))
             {
                 Remain--;
             }

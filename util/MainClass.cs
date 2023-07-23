@@ -28,7 +28,7 @@ namespace UtilPlugin
         [Description("启用管理员预留位")]
         public bool ReserveSlotEnabled { get; set; } = false;
         [Description("管理员预留位STEAM64ID")]
-        public List<string> SlotIDs { get; set; } = new List<string> { "example@steam" };
+        public List<string> SlotIds { get; set; } = new List<string> { "example@steam", "someother@steam" };
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
