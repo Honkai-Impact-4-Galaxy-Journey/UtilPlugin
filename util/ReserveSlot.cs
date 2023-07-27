@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Permissions.Extensions;
+using MEC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace UtilPlugin
 
         public static void Disconnecting(LeftEventArgs ev)
         {
-            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.AuthenticationToken))
+            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.UserId))
             {
                 Remain++;
             }
@@ -45,18 +46,21 @@ namespace UtilPlugin
         {
             if (Server.PlayerCount >= Server.MaxPlayerCount - Remain)
             {
-                if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.AuthenticationToken))
-                {
-                    Remain--;
-                    return;
-                }
-                else
-                {
-                    ev.Player.Disconnect("服务器已满人");
-                    return;
-                }
+                Timing.RunCoroutine(Checkid(ev.Player));
             }
-            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.AuthenticationToken))
+            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.UserId))
+            {
+                Remain--;
+            }
+        }
+        public static IEnumerator<float> Checkid(Player player)
+        {
+            yield return Timing.WaitForSeconds(7);
+            if (!UtilPlugin.Instance.Config.SlotIds.Contains(player.UserId))
+            {
+                player.Disconnect(UtilPlugin.Instance.Config.ReserveSlotKickReason);
+            }
+            else
             {
                 Remain--;
             }
