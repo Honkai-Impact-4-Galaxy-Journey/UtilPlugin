@@ -28,7 +28,7 @@ namespace UtilPlugin
         [Description("启用管理员预留位")]
         public bool ReserveSlotEnabled { get; set; } = false;
         [Description("管理员预留位STEAM64ID")]
-        public List<string> SlotIds { get; set; } = new List<string> { "example@steam", "someother@steam" };
+        public List<string> SlotIds { get; set; } = new List<string> { "Example@steam", "SomeOtherExample@steam" };
         [Description("预留位踢出理由")]
         public string ReserveSlotKickReason { get; set; } = "服务器已满人";
     }
@@ -42,7 +42,7 @@ namespace UtilPlugin
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
-        public override Version Version => new Version(1,1,2);
+        public override Version Version => new Version(1,2,0);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {
