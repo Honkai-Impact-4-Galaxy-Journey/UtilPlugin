@@ -17,6 +17,8 @@ namespace UtilPlugin
         [Description("设置是否启用插件")]
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; }
+        [Description("是否启用系统核弹")]
+        public bool AutoCleanupEnabled { get; set; } = true;
         [Description("每次自动清理的时间（以秒为单位）")]
         public float Cleanuptime { get; set; } = 500;
         [Description("是否启用系统核弹")]
@@ -37,7 +39,7 @@ namespace UtilPlugin
         public override void OnEnabled()
         {
             base.OnEnabled();
-            EventHandler.Register(true);
+            EventHandler.Register(Config.AutoCleanupEnabled);
             ReserveSlot.Register(Config.ReserveSlotEnabled);
         }
         public override string Author => "Silver Wolf";
