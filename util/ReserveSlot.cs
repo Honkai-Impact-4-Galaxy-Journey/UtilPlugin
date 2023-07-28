@@ -36,7 +36,7 @@ namespace UtilPlugin
 
         public static void Disconnecting(LeftEventArgs ev)
         {
-            if (ev.Player.CheckPermission("AFKImmunity"))
+            if (CheckPermission(ev.Player))
             {
                 Remain++;
             }
@@ -49,7 +49,7 @@ namespace UtilPlugin
 
         public static bool CheckPermission(Player player)
         {
-            if ((player.Group.Permissions & 4194304UL)!=0)
+            if ((player.Group.Permissions & (ulong)PlayerPermissions.AFKImmunity)!=0)
             {
                 return true;
             }
@@ -116,4 +116,5 @@ namespace CommandSystem
             return true;
         }
     }
+    
 }
