@@ -12,7 +12,7 @@ namespace UtilPlugin
 {
     public class ReserveSlot
     {
-        public static int Remain = UtilPlugin.Instance.Config.SlotIds.Count;
+        public static int Remain = UtilPlugin.Instance.Config.Slots;
         public static void Register(bool reg)
         {
             if (reg)
@@ -31,12 +31,12 @@ namespace UtilPlugin
 
         public static void RoundRestart()
         {
-            Remain = UtilPlugin.Instance.Config.SlotIds.Count;
+            Remain = UtilPlugin.Instance.Config.Slots;
         }
 
         public static void Disconnecting(LeftEventArgs ev)
         {
-            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.UserId))
+            if (ev.Player.CheckPermission("AFKImmunity"))
             {
                 Remain++;
             }
@@ -44,26 +44,29 @@ namespace UtilPlugin
 
         public static void Joining(JoinedEventArgs ev)
         {
-            if (Server.PlayerCount >= Server.MaxPlayerCount - Remain)
-            {
-                Timing.RunCoroutine(Checkid(ev.Player));
-            }
-            if (UtilPlugin.Instance.Config.SlotIds.Contains(ev.Player.UserId))
-            {
-                Remain--;
-            }
+            Timing.RunCoroutine(Checkid(ev.Player));
         }
         public static IEnumerator<float> Checkid(Player player)
         {
             yield return Timing.WaitForSeconds(7);
-            if (!UtilPlugin.Instance.Config.SlotIds.Contains(player.UserId))
+            if (Server.PlayerCount > Server.MaxPlayerCount - Remain)
             {
-                player.Disconnect(UtilPlugin.Instance.Config.ReserveSlotKickReason);
+                if (!player.CheckPermission("AFKImmunity"))
+                {
+                    player.Disconnect(UtilPlugin.Instance.Config.ReserveSlotKickReason);
+                    yield break;
+                }
+                else
+                {
+                    Remain--;
+                    yield break;
+                }
             }
-            else
+            if (player.CheckPermission("AFKImmunity"))
             {
                 Remain--;
             }
+
         }
     }
 }

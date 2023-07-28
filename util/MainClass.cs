@@ -29,8 +29,8 @@ namespace UtilPlugin
         public string SystemWarheadBroadcast { get; set; } = "注意，系统核弹已经启动";
         [Description("启用管理员预留位")]
         public bool ReserveSlotEnabled { get; set; } = false;
-        [Description("管理员预留位STEAM64ID")]
-        public List<string> SlotIds { get; set; } = new List<string> { "Example@steam", "SomeOtherExample@steam" };
+        [Description("管理员预留位数量")]
+        public int Slots { get; set; } = 5;
         [Description("预留位踢出理由")]
         public string ReserveSlotKickReason { get; set; } = "服务器已满人";
     }
