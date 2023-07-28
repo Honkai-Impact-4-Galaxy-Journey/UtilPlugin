@@ -13,7 +13,7 @@ namespace UtilPlugin
         public static CoroutineHandle _systemwarheadwaiter;
         public static void OnRoundStarted()
         {
-            _systemwarheadwaiter = Timing.RunCoroutine(SystemWarheadwaiter(UtilPlugin.Instance.Config.SysteamWarheadTime));
+            _systemwarheadwaiter = Timing.RunCoroutine(SystemWarheadwaiter(UtilPlugin.Instance.Config.SystemWarheadTime));
         }
         public static void OnRoundFinished()
         {
@@ -24,7 +24,7 @@ namespace UtilPlugin
             yield return Timing.WaitForSeconds(time);
             Detonate();
         }
-        public static void Detonate()
+        public static void Detonate(bool sendbroadcast = true)
         {
             Warhead.LeverStatus = true;
             Warhead.IsKeycardActivated = true;
@@ -33,7 +33,10 @@ namespace UtilPlugin
                 Warhead.Start();
             }
             Warhead.IsLocked = true;
-            PluginAPI.Core.Server.SendBroadcast(UtilPlugin.Instance.Config.SystemWarheadBroadcast, 10, Broadcast.BroadcastFlags.Normal, true);
+            if (sendbroadcast)
+            {
+                PluginAPI.Core.Server.SendBroadcast(UtilPlugin.Instance.Config.SystemWarheadBroadcast, 10, Broadcast.BroadcastFlags.Normal, true);
+            }
         }
     }
 }

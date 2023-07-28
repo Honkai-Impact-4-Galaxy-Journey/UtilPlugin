@@ -49,7 +49,7 @@ namespace UtilPlugin
 
         public static bool CheckPermission(Player player)
         {
-            if ((player.Group.Permissions & (ulong)PlayerPermissions.AFKImmunity)!=0)
+            if (!(player.Group == null) && (player.Group.Permissions & (ulong)PlayerPermissions.AFKImmunity) != 0)
             {
                 return true;
             }
@@ -61,7 +61,7 @@ namespace UtilPlugin
 
         public static IEnumerator<float> Checkid(Player player)
         {
-            yield return Timing.WaitForSeconds(7);
+            yield return Timing.WaitForSeconds(10);
             if (Server.PlayerCount > Server.MaxPlayerCount - Remain)
             {
                 if (!CheckPermission(player))
@@ -87,24 +87,48 @@ namespace CommandSystem
 {
     [CommandHandler(typeof(GameConsoleCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class Test : ICommand
+    public class Refresh : ICommand
     {
-        public string Command => "test";
+        public string Command => "refresh";
 
         public string[] Aliases => Array.Empty<string>();
 
-        public string Description => "";
+        public string Description => "刷新预留位剩余";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            response = UtilPlugin.ReserveSlot.Remain.ToString() + " " + (Server.MaxPlayerCount - UtilPlugin.ReserveSlot.Remain).ToString();
+            UtilPlugin.ReserveSlot.RoundRestart();
+            foreach (Player player in Player.List)
+            {
+                if (UtilPlugin.ReserveSlot.CheckPermission(player))
+                {
+                    UtilPlugin.ReserveSlot.Remain--;
+                }
+            }
+            response = $"Remain:{UtilPlugin.ReserveSlot.Remain}";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class Fetch : ICommand
+    {
+        public string Command => "FetchRemain";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "查询预留位剩余";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            response = $"Remain:{UtilPlugin.ReserveSlot.Remain},Total:{Server.PlayerCount}";
             return true;
         }
     }
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class CheckPermission : ICommand
     {
-        public string Command => "checkpermission";
+        public string Command => "setremain";
 
         public string[] Aliases => Array.Empty<string>();
 
@@ -112,7 +136,13 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            response = UtilPlugin.ReserveSlot.CheckPermission(Player.Get((sender as CommandSender).SenderId)).ToString();
+            if (arguments.Count != 1)
+            {
+                response = "need 1 argument!Usage:setremain <newremain>";
+                return false;
+            }
+            UtilPlugin.ReserveSlot.Remain = int.Parse(arguments.At(0));
+            response = "Done!";
             return true;
         }
     }
