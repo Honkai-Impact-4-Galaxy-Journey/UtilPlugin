@@ -46,12 +46,25 @@ namespace UtilPlugin
         {
             Timing.RunCoroutine(Checkid(ev.Player));
         }
+
+        public static bool CheckPermission(Player player)
+        {
+            if ((player.Group.Permissions & 4194304UL)!=0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static IEnumerator<float> Checkid(Player player)
         {
             yield return Timing.WaitForSeconds(7);
             if (Server.PlayerCount > Server.MaxPlayerCount - Remain)
             {
-                if (!player.CheckPermission("AFKImmunity"))
+                if (!CheckPermission(player))
                 {
                     player.Disconnect(UtilPlugin.Instance.Config.ReserveSlotKickReason);
                     yield break;
@@ -62,7 +75,7 @@ namespace UtilPlugin
                     yield break;
                 }
             }
-            if (player.CheckPermission("AFKImmunity"))
+            if (CheckPermission(player))
             {
                 Remain--;
             }
@@ -73,6 +86,7 @@ namespace UtilPlugin
 namespace CommandSystem
 {
     [CommandHandler(typeof(GameConsoleCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Test : ICommand
     {
         public string Command => "test";
@@ -84,6 +98,21 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = UtilPlugin.ReserveSlot.Remain.ToString() + " " + (Server.MaxPlayerCount - UtilPlugin.ReserveSlot.Remain).ToString();
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class CheckPermission : ICommand
+    {
+        public string Command => "checkpermission";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            response = UtilPlugin.ReserveSlot.CheckPermission(Player.Get((sender as CommandSender).SenderId)).ToString();
             return true;
         }
     }
