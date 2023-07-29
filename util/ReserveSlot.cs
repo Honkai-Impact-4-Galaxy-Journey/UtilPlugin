@@ -13,6 +13,7 @@ namespace UtilPlugin
     public class ReserveSlot
     {
         public static int Remain = UtilPlugin.Instance.Config.Slots;
+        public static CoroutineHandle _autorefresh;
         public static void Register(bool reg)
         {
             if (reg)
@@ -31,7 +32,25 @@ namespace UtilPlugin
 
         public static void RoundRestart()
         {
+            Timing.KillCoroutines(_autorefresh);
             Remain = UtilPlugin.Instance.Config.Slots;
+            _autorefresh = Timing.RunCoroutine(Autorefresher(60));
+        }
+
+        private static IEnumerator<float> Autorefresher(int time)
+        {
+            while (true)
+            {
+                yield return Timing.WaitForSeconds(time);
+                Remain = UtilPlugin.Instance.Config.Slots;
+                foreach (Player player in Player.List)
+                {
+                    if (ReserveSlot.CheckPermission(player))
+                    {
+                        ReserveSlot.Remain--;
+                    }
+                }
+            }
         }
 
         public static void Disconnecting(LeftEventArgs ev)
