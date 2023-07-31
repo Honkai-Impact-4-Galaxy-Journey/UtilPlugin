@@ -144,6 +144,7 @@ namespace CommandSystem
             return true;
         }
     }
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class CheckPermission : ICommand
     {

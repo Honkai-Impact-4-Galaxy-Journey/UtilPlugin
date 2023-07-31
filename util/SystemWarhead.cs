@@ -26,6 +26,10 @@ namespace UtilPlugin
         }
         public static void Detonate(bool sendbroadcast = true)
         {
+            if (Warhead.IsDetonated)
+            {
+                return;
+            }
             Warhead.LeverStatus = true;
             Warhead.IsKeycardActivated = true;
             if (!Warhead.IsInProgress)
