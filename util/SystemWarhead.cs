@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.Events.EventArgs.Server;
 using MEC;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,33 @@ namespace UtilPlugin
         {
             _systemwarheadwaiter = Timing.RunCoroutine(SystemWarheadwaiter(UtilPlugin.Instance.Config.SystemWarheadTime));
         }
+        public static void Register()
+        {
+            if (UtilPlugin.Instance.Config.SystemWarheadEnabled)
+            {
+                Exiled.Events.Handlers.Server.RoundStarted += SystemWarhead.OnRoundStarted;
+                Exiled.Events.Handlers.Server.RestartingRound += SystemWarhead.OnRoundFinished;
+            }
+            else
+            {
+                Exiled.Events.Handlers.Server.RoundStarted -= SystemWarhead.OnRoundStarted;
+                Exiled.Events.Handlers.Server.RestartingRound -= SystemWarhead.OnRoundFinished;
+            }
+            if (UtilPlugin.Instance.Config.DetonateOnRoundEnded)
+            {
+                Exiled.Events.Handlers.Server.EndingRound += OnRoundEnded;
+            }
+            else
+            {
+                Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnded;
+            }
+        }
+
+        public static void OnRoundEnded(EndingRoundEventArgs ev)
+        {
+            Warhead.Detonate();
+        }
+
         public static void OnRoundFinished()
         {
             Timing.KillCoroutines(_systemwarheadwaiter);

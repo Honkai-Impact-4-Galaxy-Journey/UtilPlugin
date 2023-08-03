@@ -27,6 +27,8 @@ namespace UtilPlugin
         public float SystemWarheadTime { get; set; } = 1200;
         [Description("系统核弹触发时公告")]
         public string SystemWarheadBroadcast { get; set; } = "注意，系统核弹已经启动";
+        [Description("回合结束后是否自动引爆核弹")]
+        public bool DetonateOnRoundEnded { get; set; } = false;
         [Description("启用管理员预留位")]
         public bool ReserveSlotEnabled { get; set; } = false;
         [Description("管理员预留位数量")]
@@ -41,10 +43,11 @@ namespace UtilPlugin
             base.OnEnabled();
             EventHandler.Register(Config.AutoCleanupEnabled);
             ReserveSlot.Register(Config.ReserveSlotEnabled);
+            SystemWarhead.Register();
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
-        public override Version Version => new Version(1,2,2);
+        public override Version Version => new Version(1,2,3);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {
