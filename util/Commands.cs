@@ -1,4 +1,5 @@
-﻿using CommandSystem;
+﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
+using CommandSystem;
 using Exiled.API.Features;
 using MEC;
 using System;

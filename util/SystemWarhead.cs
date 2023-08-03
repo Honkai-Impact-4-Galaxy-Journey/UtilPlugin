@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using System;

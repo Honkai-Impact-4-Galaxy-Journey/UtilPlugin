@@ -1,4 +1,5 @@
-﻿using Exiled.Events.EventArgs.Server;
+﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
+using Exiled.Events.EventArgs.Server;
 using PluginAPI.Core;
 using System;
 using System.Collections.Generic;
