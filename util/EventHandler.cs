@@ -54,7 +54,7 @@ namespace UtilPlugin
             while(Flag)
             {
                 yield return Timing.WaitForSeconds(delay-30);
-                PluginAPI.Core.Server.SendBroadcast("服务器将在30秒后清理掉落物和尸体", 10);
+                PluginAPI.Core.Server.SendBroadcast("The server will clean up after 30 seconds", 10);
                 yield return Timing.WaitForSeconds(30);
                 foreach(var a in UnityEngine.Object.FindObjectsOfType<ItemPickupBase>())
                 {
@@ -68,7 +68,7 @@ namespace UtilPlugin
                 {
                     Ragdoll.Get(a).Destroy();
                 }
-                PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
+                PluginAPI.Core.Server.SendBroadcast($"The cleanup is complete, and the next cleanup will occur after {delay} seconds", 10);
             }
         }
     }

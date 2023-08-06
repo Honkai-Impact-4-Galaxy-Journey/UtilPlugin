@@ -16,17 +16,17 @@ namespace CommandSystem
     {
         public string[] Aliases => Array.Empty<string>();
 
-        public string Description => "防卡死指令";
+        public string Description => "selfkill";
 
         string ICommand.Command => "killme";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get((sender as CommandSender).SenderId);
-            const string DeathReason = "防卡死指令";
+            const string DeathReason = "Unknown Reason";
             if (player.IsDead)
             {
-                response = "你已经死了，想啥呢？";
+                response = "you are already dead.";
             }
             else
             {
@@ -44,8 +44,8 @@ namespace CommandSystem
         }
 
     }
-    [CommandHandler(typeof(RemoteAdminCommandHandler))]
     [CommandHandler(typeof(ClientCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Setbadge : ICommand, IUsageProvider
     {
         public string[] Usage => new string[] { "newbadge", "newcolor", "id" };
@@ -86,7 +86,7 @@ namespace CommandSystem
 
         public string[] Aliases => new string[] {"asw"};
 
-        public string Description => "启动系统核";
+        public string Description => "activate system warhead now";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
