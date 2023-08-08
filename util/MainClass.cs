@@ -36,6 +36,8 @@ namespace UtilPlugin
         public int Slots { get; set; } = 5;
         [Description("预留位踢出理由")]
         public string ReserveSlotKickReason { get; set; } = "服务器已满人";
+        [Description("允许投票提前开启系统核")]
+        public bool AllowVoteSystemWarhead { get; set; } = true;
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
@@ -48,7 +50,7 @@ namespace UtilPlugin
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
-        public override Version Version => new Version(1,2,3);
+        public override Version Version => new Version(1,3,0);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {

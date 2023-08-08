@@ -37,6 +37,10 @@ namespace UtilPlugin
             {
                 Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnded;
             }
+            if (UtilPlugin.Instance.Config.AllowVoteSystemWarhead)
+            {
+                Voting.Register(new VotingEvent { Action = () => Detonate(false), Name = "systemwarhead", Description="启动系统核[55%]", VotingDes="系统核弹"});
+            }
         }
 
         public static void OnRoundEnded(EndingRoundEventArgs ev)
