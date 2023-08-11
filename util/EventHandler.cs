@@ -14,6 +14,7 @@ using InventorySystem.Items.Pickups;
 using InventorySystem.Items;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
+using Exiled.Events.EventArgs.Scp914;
 
 namespace UtilPlugin
 {
@@ -26,19 +27,30 @@ namespace UtilPlugin
             {
                 Exiled.Events.Handlers.Server.RoundStarted += Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound += Stopcleanup;
+                Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
             }
             else
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
+                Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= Show914;
             }
+        }
+
+        public static void Show914(ChangingKnobSettingEventArgs ev)
+        {
+            if (ev.KnobSetting == Scp914.Scp914KnobSetting.Rough)
+            {
+                ServerConsole.AddLog($"[Warning]{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}");
+                return;
+            }
+            ServerConsole.AddLog($"{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}");
         }
         static bool Flag;
         private static void Stopcleanup()
         {
             Timing.KillCoroutines(_cleanupcoroutine);
         }
-
         public static void Cleanup()
         {
             Flag = true;
