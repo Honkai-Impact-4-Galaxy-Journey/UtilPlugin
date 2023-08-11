@@ -1,6 +1,5 @@
 ﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
 using Exiled.Events.EventArgs.Server;
-using PluginAPI.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,26 +27,40 @@ namespace UtilPlugin
                 Exiled.Events.Handlers.Server.RoundStarted += Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound += Stopcleanup;
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
+                Exiled.Events.Handlers.Scp914.Activating += OnActivate914;
             }
             else
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= Show914;
+                Exiled.Events.Handlers.Scp914.Activating -= OnActivate914;
             }
+        }
+        public static Player player;
+        public static void OnActivate914(ActivatingEventArgs ev)
+        {
+            if (Scp914.Scp914Controller.Singleton.KnobSetting == Scp914.Scp914KnobSetting.Rough)
+            {
+                ServerConsole.AddLog($"[Warning]{ev.Player.Nickname}({ev.Player.UserId})activated 914 as {Scp914.Scp914Controller.Singleton.KnobSetting} mode", ConsoleColor.Yellow);
+                return;
+            }
+            ServerConsole.AddLog($"{ev.Player.Nickname}({ev.Player.UserId})activated 914 as {Scp914.Scp914Controller.Singleton.KnobSetting} mode");
         }
 
         public static void Show914(ChangingKnobSettingEventArgs ev)
         {
             if (ev.KnobSetting == Scp914.Scp914KnobSetting.Rough)
             {
-                ServerConsole.AddLog($"[Warning]{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}");
+                ServerConsole.AddLog($"[Warning]{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}",ConsoleColor.Yellow);
+                player = ev.Player;
                 return;
             }
             ServerConsole.AddLog($"{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}");
         }
+        
         static bool Flag;
-        private static void Stopcleanup()
+        public static void Stopcleanup()
         {
             Timing.KillCoroutines(_cleanupcoroutine);
         }
