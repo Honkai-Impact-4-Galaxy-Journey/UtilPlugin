@@ -92,4 +92,46 @@ namespace CommandSystem
             return true;
         }
     }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    public class StopCleanup : ICommand
+    {
+        public string Command => "stopautoclean";
+
+        public string[] Aliases => new string[] {"sc"};
+
+        public string Description => "停止自动清理";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Timing.KillCoroutines(UtilPlugin.EventHandler._cleanupcoroutine);
+            if (arguments.Count==1 && bool.Parse(arguments.At(0)))
+            {
+                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的自动清理",10);
+            }
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    public class StopSystemWarhead : ICommand
+    {
+        public string Command => "stopsystemwarhead";
+
+        public string[] Aliases => new string[] {"stopautonuke"};
+
+        public string Description => "停止系统核";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Timing.KillCoroutines(UtilPlugin.SystemWarhead._systemwarheadwaiter);
+            if (arguments.Count == 1 && bool.Parse(arguments.At(0)))
+            {
+                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的系统核弹", 10);
+            }
+            response = "Done!";
+            return true;
+        }
+    }
 }

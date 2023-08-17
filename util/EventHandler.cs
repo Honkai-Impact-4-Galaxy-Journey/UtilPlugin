@@ -19,7 +19,7 @@ namespace UtilPlugin
 {
     public class EventHandler
     {
-        private static CoroutineHandle _cleanupcoroutine;
+        public static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
         {
             if (value)
@@ -72,7 +72,7 @@ namespace UtilPlugin
         }
         public static bool IsSCPitem(ItemType type)
         {
-            return type == ItemType.SCP330 || type == ItemType.SCP500 || type == ItemType.SCP268 || type == ItemType.SCP2176 || type == ItemType.SCP207 || type == ItemType.SCP1853 || type == ItemType.SCP1576 || type == ItemType.SCP018;
+            return type == ItemType.SCP330 || type == ItemType.SCP500 || type == ItemType.SCP268 || type == ItemType.SCP244a || type==ItemType.SCP244b || type == ItemType.SCP2176 || type == ItemType.SCP207 || type == ItemType.SCP1853 || type == ItemType.SCP1576 || type == ItemType.SCP018;
         }
         public static IEnumerator<float> cleanupwaiter(float delay)
         {
