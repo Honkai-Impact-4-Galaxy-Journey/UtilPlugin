@@ -38,6 +38,8 @@ namespace UtilPlugin
         public string ReserveSlotKickReason { get; set; } = "服务器已满人";
         [Description("允许投票提前开启系统核")]
         public bool AllowVoteSystemWarhead { get; set; } = true;
+        [Description("投票时长")]
+        public int VotingTime { get; set; } = 120;
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {

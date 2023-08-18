@@ -39,7 +39,7 @@ namespace UtilPlugin
             }
             if (UtilPlugin.Instance.Config.AllowVoteSystemWarhead)
             {
-                Voting.Register(new VotingEvent { Action = () => Detonate(false), Name = "systemwarhead", Description="启动系统核[55%]", VotingDes="系统核弹"});
+                Voting.Register(new VotingEvent { Action = () => Detonate(false), Name = "systemwarhead", Description="启动系统核[55%]", VotingDes="系统核弹", Votingpercent=0.55, AcceptBroadcast="系统核弹已经启动"});
             }
         }
 
