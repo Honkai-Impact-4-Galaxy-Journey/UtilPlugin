@@ -85,7 +85,7 @@ namespace UtilPlugin
         {
             if (!voting)
             {
-                return ("当前没有进行中的投票",false);
+                return ("当前没有进行中的投票", false);
             }
             if (VotedPlayer.Contains(player.Id))
             {
@@ -101,7 +101,7 @@ namespace UtilPlugin
             while (time != 0)
             {
                 time--;
-                PluginAPI.Core.Server.SendBroadcast($"{player.Nickname}:发起<color=yellow>{votingEvent.VotingDes}</color>的投票(<color=green>{VotedPlayer.Count}</color>/{Server.PlayerCount})",1,Broadcast.BroadcastFlags.Normal,true);
+                PluginAPI.Core.Server.SendBroadcast($"{player.Nickname}:发起<color=yellow>{votingEvent.VotingDes}</color>的投票(<color=green>{VotedPlayer.Count}</color>/{Server.PlayerCount}({(int)((double)VotedPlayer.Count / Server.PlayerCount * 100)}[{time}]))",1,Broadcast.BroadcastFlags.Normal,true);
                 yield return Timing.WaitForSeconds(1.2f);
             }
             OnVotingEnded(votingEvent);
