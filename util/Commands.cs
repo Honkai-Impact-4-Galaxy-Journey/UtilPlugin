@@ -105,9 +105,9 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Timing.KillCoroutines(UtilPlugin.EventHandler._cleanupcoroutine);
-            if (arguments.Count==1 && bool.Parse(arguments.At(0)))
+            if (arguments.Count != 1 || !bool.Parse(arguments.At(0)))
             {
-                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的自动清理",10);
+                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的自动清理", 10);
             }
             response = "Done!";
             return true;
@@ -126,7 +126,7 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Timing.KillCoroutines(UtilPlugin.SystemWarhead._systemwarheadwaiter);
-            if (arguments.Count == 1 && bool.Parse(arguments.At(0)))
+            if (arguments.Count != 1 || !bool.Parse(arguments.At(0)))
             {
                 PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的系统核弹", 10);
             }
