@@ -12,7 +12,7 @@ namespace UtilPlugin
     public class Voting
     {
         public static Dictionary<string,VotingEvent> keyValuePairs = new Dictionary<string,VotingEvent>();
-        public static ConcurrentBag<int> VotedPlayer;
+        public static ConcurrentBag<string> VotedPlayer;
         public static bool Canvote = false, voting = false;
         public static CoroutineHandle votingcoroutine;
         public static void OnEnabled(bool value)
@@ -42,7 +42,7 @@ namespace UtilPlugin
         public static void OnRoundStarted()
         {
             Canvote = false;
-            VotedPlayer = new ConcurrentBag<int>();
+            VotedPlayer = new ConcurrentBag<string>();
             Timing.CallDelayed(60f, () => Canvote = true);
         }
         public static void OnVotingEnded(VotingEvent votingEvent)
@@ -57,7 +57,7 @@ namespace UtilPlugin
                 PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>没有足够玩家投票", 5, Broadcast.BroadcastFlags.Normal, true);
             }
             voting = false;
-            VotedPlayer = new ConcurrentBag<int>();
+            VotedPlayer = new ConcurrentBag<string>();
             Timing.CallDelayed(30f, () => Canvote = true);
         }
         public static void Callvote(string name, Player player)
@@ -77,7 +77,7 @@ namespace UtilPlugin
             }
             Canvote = false;
             voting = true;
-            VotedPlayer.Add(player.Id);
+            VotedPlayer.Add(player.UserId);
             votingcoroutine = Timing.RunCoroutine(SendBroadcast(keyValuePairs[name], player));
             return;
         }
@@ -88,11 +88,11 @@ namespace UtilPlugin
             {
                 return ("当前没有进行中的投票", false);
             }
-            if (VotedPlayer.Contains(player.Id))
+            if (VotedPlayer.Contains(player.UserId))
             {
                 return ("你已经投过票了！", false);
             }
-            VotedPlayer.Add(player.Id);
+            VotedPlayer.Add(player.UserId);
             return ("成功！", true);
         }
 
