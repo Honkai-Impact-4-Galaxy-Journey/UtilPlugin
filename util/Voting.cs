@@ -56,6 +56,7 @@ namespace UtilPlugin
             {
                 PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>没有足够玩家投票", 5, Broadcast.BroadcastFlags.Normal, true);
             }
+            voting = false;
             VotedPlayer = new ConcurrentBag<int>();
             Timing.CallDelayed(30f, () => Canvote = true);
         }
@@ -101,8 +102,8 @@ namespace UtilPlugin
             while (time != 0)
             {
                 time--;
-                PluginAPI.Core.Server.SendBroadcast($"{player.Nickname}:发起<color=yellow>{votingEvent.VotingDes}</color>的投票(<color=green>{VotedPlayer.Count}</color>/{Server.PlayerCount}({(int)((double)VotedPlayer.Count / Server.PlayerCount * 100)}[{time}]))",1,Broadcast.BroadcastFlags.Normal,true);
-                yield return Timing.WaitForSeconds(1.2f);
+                PluginAPI.Core.Server.SendBroadcast($"{player.Nickname}:发起<color=yellow>{votingEvent.VotingDes}</color>的投票,使用.vote来投票(<color=green>{VotedPlayer.Count}</color>/{Server.PlayerCount}({(int)((double)VotedPlayer.Count / Server.PlayerCount * 100)}%)[{time}])",1,Broadcast.BroadcastFlags.Normal,true);
+                yield return Timing.WaitForSeconds(1.1f);
             }
             OnVotingEnded(votingEvent);
         }
@@ -166,6 +167,7 @@ namespace CommandSystem
             }
         }
     }
+    [CommandHandler(typeof(ClientCommandHandler))]
     public class Vote : ICommand
     {
         public string Command => "vote";
