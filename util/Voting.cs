@@ -20,25 +20,30 @@ namespace UtilPlugin
             if (value)
             {
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-                Exiled.Events.Handlers.Server.EndingRound += OnRoundEnded;
+                Exiled.Events.Handlers.Server.RestartingRound += OnRoundEnded;
             }
             else
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-                Exiled.Events.Handlers.Server.EndingRound += OnRoundEnded;
+                Exiled.Events.Handlers.Server.RestartingRound -= OnRoundEnded;
             }
         }
 
-        public static void OnRoundEnded(EndingRoundEventArgs ev)
+        public static void OnRoundEnded()
         {
             Timing.KillCoroutines(votingcoroutine);
+        }
+        public static bool CancalVote(Player player)
+        {
             if (voting)
             {
-                PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>回合已结束", 5, Broadcast.BroadcastFlags.Normal, true);
-                voting = false;
+                Timing.KillCoroutines(votingcoroutine);
+                PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>管理员 {player.Nickname} 强制废除了此次投票", 5, Broadcast.BroadcastFlags.Normal, true);
+                Timing.CallDelayed(30, () => Canvote = true);
+                return true;
             }
+            return false;
         }
-
         public static void OnRoundStarted()
         {
             Canvote = false;
@@ -47,6 +52,7 @@ namespace UtilPlugin
         }
         public static void OnVotingEnded(VotingEvent votingEvent)
         {
+            voting = false;
             if ((double)VotedPlayer.Count/(double)Server.PlayerCount >= votingEvent.Votingpercent)
             {
                 votingEvent.Action();
@@ -56,7 +62,6 @@ namespace UtilPlugin
             {
                 PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>没有足够玩家投票", 5, Broadcast.BroadcastFlags.Normal, true);
             }
-            voting = false;
             VotedPlayer = new ConcurrentBag<string>();
             Timing.CallDelayed(30f, () => Canvote = true);
         }
@@ -181,6 +186,26 @@ namespace CommandSystem
             bool res;
             (response, res) = UtilPlugin.Voting.Vote(Player.Get((sender as CommandSender).SenderId));
             return res;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class CancalVote : ICommand
+    {
+        public string Command => "cancalvote";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "废除正在进行的投票";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (UtilPlugin.Voting.CancalVote(Player.Get((sender as CommandSender).SenderId)))
+            {
+                response = "Done!";
+                return true;
+            }
+            response = "当前没有进行中的投票";
+            return false;
         }
     }
 }
