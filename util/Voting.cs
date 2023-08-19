@@ -20,19 +20,25 @@ namespace UtilPlugin
             if (value)
             {
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-                Exiled.Events.Handlers.Server.RestartingRound += OnRoundEnded;
+                Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             }
             else
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-                Exiled.Events.Handlers.Server.RestartingRound -= OnRoundEnded;
+                Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             }
         }
 
-        public static void OnRoundEnded()
+        public static void OnRoundEnded(RoundEndedEventArgs ev)
         {
             Timing.KillCoroutines(votingcoroutine);
+            if (voting)
+            {
+                PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>回合已结束", 5, Broadcast.BroadcastFlags.Normal, true);
+                voting = false;
+            }
         }
+
         public static bool CancalVote(Player player)
         {
             if (voting)
