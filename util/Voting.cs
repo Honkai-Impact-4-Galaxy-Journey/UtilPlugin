@@ -46,6 +46,7 @@ namespace UtilPlugin
                 Timing.KillCoroutines(votingcoroutine);
                 PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>管理员 {player.Nickname} 强制废除了此次投票", 5, Broadcast.BroadcastFlags.Normal, true);
                 Timing.CallDelayed(30, () => Canvote = true);
+                voting = false;
                 return true;
             }
             return false;
