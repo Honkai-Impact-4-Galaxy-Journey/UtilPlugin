@@ -38,7 +38,7 @@ namespace UtilPlugin
             _autorefresh = Timing.RunCoroutine(Autorefresher(60));
         }
 
-        private static IEnumerator<float> Autorefresher(int time)
+        public static IEnumerator<float> Autorefresher(int time)
         {
             while (true)
             {
