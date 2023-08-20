@@ -134,4 +134,21 @@ namespace CommandSystem
             return true;
         }
     }
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class UtilInfo : ICommand
+    {
+        public string Command => "utilplugininfo";
+
+        public string[] Aliases => new string[] { "utilinfo", "uinfo" };
+
+        public string Description => "UtilPlugin插件相关";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            response = "Copyright (C) 2023 Silver Wolf,All Rights Reserved.\n仓库地址: https://github.com/dargoncat/UtilPlugin";
+            return true;
+        }
+    }
 }
