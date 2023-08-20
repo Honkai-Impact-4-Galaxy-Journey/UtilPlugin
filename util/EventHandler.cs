@@ -24,17 +24,23 @@ namespace UtilPlugin
         {
             if (value)
             {
-                Exiled.Events.Handlers.Server.RoundStarted += Cleanup;
-                Exiled.Events.Handlers.Server.RestartingRound += Stopcleanup;
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
                 Exiled.Events.Handlers.Scp914.Activating += OnActivate914;
             }
             else
             {
-                Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
-                Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= Show914;
                 Exiled.Events.Handlers.Scp914.Activating -= OnActivate914;
+            }
+            if (UtilPlugin.Instance.Config.EnableAutoCleanup)
+            {
+                Exiled.Events.Handlers.Server.RoundStarted += Cleanup;
+                Exiled.Events.Handlers.Server.RestartingRound += Stopcleanup;
+            }
+            else
+            {
+                Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
+                Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
             }
         }
         public static Player player;
