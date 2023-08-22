@@ -45,7 +45,8 @@ namespace UtilPlugin
             {
                 Timing.KillCoroutines(votingcoroutine);
                 PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>管理员 {player.Nickname} 强制废除了此次投票", 5, Broadcast.BroadcastFlags.Normal, true);
-                Timing.CallDelayed(30, () => Canvote = true);
+                VotedPlayer = new ConcurrentBag<string>();
+                Timing.CallDelayed(90f, () => Canvote = true);
                 voting = false;
                 return true;
             }
@@ -70,7 +71,7 @@ namespace UtilPlugin
                 PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>没有足够玩家投票", 5, Broadcast.BroadcastFlags.Normal, true);
             }
             VotedPlayer = new ConcurrentBag<string>();
-            Timing.CallDelayed(30f, () => Canvote = true);
+            Timing.CallDelayed(90f, () => Canvote = true);
         }
         public static void Callvote(string name, Player player)
         {
