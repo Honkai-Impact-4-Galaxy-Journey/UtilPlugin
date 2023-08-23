@@ -147,6 +147,7 @@
     <Compile Include="Gamemode.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RainbowTag.cs" />
     <Compile Include="ReserveSlot.cs" />
     <Compile Include="SystemWarhead.cs" />
     <Compile Include="Voting.cs" />
