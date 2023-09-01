@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Exiled.API.Features;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace UtilPlugin
         {
             if (UtilPlugin.Instance.Config.ArrowVoteFunny)
             {
-                Voting.Register(new VotingEvent { Action = () => NextMode = Gamemodes.Other, Votingpercent = 0.5, Name = "funnygame", AcceptBroadcast = "下回合游戏模式为<color=yellow>娱乐</color>", Description = "更改下回合游戏模式为娱乐[不能]", VotingDes = "更改下回合游戏模式为娱乐" });
+                Voting.Register(new VotingEvent { Action = () => NextMode = Gamemodes.Other, Votingpercent = 0.5, Name = "funnygame", AcceptBroadcast = "下回合游戏模式为<color=yellow>娱乐</color>", Description = "更改下回合游戏模式为娱乐[不能在无管理员时发起]", VotingDes = "更改下回合游戏模式为娱乐", CheckBeforeVoting = CheckCanChangeMode, OnVotingEnded = () => { return Voting.AgainstPlayer.Count == 0; } });
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             }
         }
@@ -31,6 +32,18 @@ namespace UtilPlugin
                     PluginAPI.Core.Server.SendBroadcast("<size=20><color=red>「回合开始」</color>本局为娱乐模式</size>", 5, Broadcast.BroadcastFlags.Normal, true);
                     break;
             }
+        }
+
+        public static bool CheckCanChangeMode()
+        {
+            foreach(Player player in Player.List)
+            {
+                if (player.Group != null && (player.Group.Permissions & (ulong)PlayerPermissions.ForceclassWithoutRestrictions) != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
