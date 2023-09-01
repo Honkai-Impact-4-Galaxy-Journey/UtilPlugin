@@ -21,7 +21,7 @@ namespace UtilPlugin
         [Description("是否启用系统核弹")]
         public bool AutoCleanupEnabled { get; set; } = true;
         [Description("是否启用自动清理")]
-        public bool EnableAutoCleanup { get; set;} = true;
+        public bool EnableAutoCleanup { get; set; } = true;
         [Description("每次自动清理的时间（以秒为单位）")]
         public float Cleanuptime { get; set; } = 500;
         [Description("是否启用系统核弹")]
@@ -41,7 +41,9 @@ namespace UtilPlugin
         [Description("允许投票提前开启系统核")]
         public bool AllowVoteSystemWarhead { get; set; } = true;
         [Description("投票时长")]
-        public int VotingTime { get; set; } = 60;
+        public int VotingTime { get; set; } = 90;
+        [Description("允许投票开启娱乐")]
+        public bool ArrowVoteFunny { get; set; } = true;
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
@@ -55,7 +57,7 @@ namespace UtilPlugin
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
-        public override Version Version => new Version(1,3,0);
+        public override Version Version => new Version(1,3,1);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {

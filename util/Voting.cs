@@ -108,7 +108,14 @@ namespace UtilPlugin
             VotedPlayer.Add(player.UserId);
             return ("成功！", true);
         }
-
+        public static IEnumerator<float> ForceAccept(int a)
+        {
+            for (int i = 0; i < a; i++)
+            {
+                VotedPlayer.Add($"{i}");
+                if (i % 2 == 0) yield return Timing.WaitForSeconds(1);
+            }
+        }
         public static IEnumerator<float> SendBroadcast(VotingEvent votingEvent, Player player)
         {
             int time = UtilPlugin.Instance.Config.VotingTime;
@@ -142,6 +149,8 @@ namespace UtilPlugin
         public string VotingDes { get; set; }
         public double Votingpercent { get; set; }
         public string AcceptBroadcast { get; set; }
+        public Func<bool> CheckBeforeVoting { get; set; }
+        public Func<bool> OnVotingEnded { get; set; }
     }
 }
 namespace CommandSystem
@@ -214,6 +223,27 @@ namespace CommandSystem
             }
             response = "当前没有进行中的投票";
             return false;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class AcceptVote : ICommand
+    {
+        public string Command => "acceptvote";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "force accept vote";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (!UtilPlugin.Voting.voting)
+            {
+                response = "当前无进行中投票！";
+                return false;
+            }
+            Timing.RunCoroutine(UtilPlugin.Voting.ForceAccept(Server.PlayerCount / 2));
+            response = "Done!";
+            return true;
         }
     }
 }
