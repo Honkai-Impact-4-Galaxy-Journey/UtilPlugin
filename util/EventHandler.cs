@@ -22,6 +22,7 @@ namespace UtilPlugin
         public static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
         {
+            Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
             if (value)
             {
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
