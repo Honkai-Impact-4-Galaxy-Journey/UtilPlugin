@@ -91,6 +91,10 @@ namespace UtilPlugin
             {
                 throw new ArgumentException("没有此投票");
             }
+            if (!keyValuePairs[name].CheckBeforeVoting())
+            {
+                throw new ArgumentException("目前不满足该投票发起条件");
+            }
             Canvote = false;
             voting = true;
             AcceptPlayer.Add(player.UserId);

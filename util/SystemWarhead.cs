@@ -32,11 +32,11 @@ namespace UtilPlugin
             }
             if (UtilPlugin.Instance.Config.DetonateOnRoundEnded)
             {
-                Exiled.Events.Handlers.Server.EndingRound += OnRoundEnded;
+                Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             }
             else
             {
-                Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnded;
+                Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
             }
             if (true)
             {
@@ -44,7 +44,7 @@ namespace UtilPlugin
             }
         }
 
-        public static void OnRoundEnded(EndingRoundEventArgs ev)
+        public static void OnRoundEnded(RoundEndedEventArgs roundEndedEventArgs)
         {
             Warhead.Detonate();
         }
