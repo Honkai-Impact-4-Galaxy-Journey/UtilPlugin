@@ -38,7 +38,7 @@ namespace UtilPlugin
             {
                 Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnded;
             }
-            if (UtilPlugin.Instance.Config.AllowVoteSystemWarhead)
+            if (true)
             {
                 Voting.Register(new VotingEvent { Action = () => Detonate(false), Name = "systemwarhead", Description = "启动系统核[55%]", VotingDes = "系统核弹", Votingpercent = 0.55, AcceptBroadcast = "系统核弹已经启动", CheckBeforeVoting = () => { return true; }, OnVotingEnded = () => { return ((double)Voting.AcceptPlayer.Count + (double)(Server.PlayerCount - Voting.AcceptPlayer.Count - Voting.AgainstPlayer.Count)*0.3) / Server.PlayerCount >= 0.55; } });
             }

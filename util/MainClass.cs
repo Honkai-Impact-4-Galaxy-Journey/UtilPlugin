@@ -38,7 +38,7 @@ namespace UtilPlugin
         public int Slots { get; set; } = 5;
         [Description("预留位踢出理由")]
         public string ReserveSlotKickReason { get; set; } = "服务器已满人";
-        [Description("允许投票提前开启系统核")]
+        [Description("允许投票提前开启系统核(Disabled)")]
         public bool AllowVoteSystemWarhead { get; set; } = true;
         [Description("投票时长")]
         public int VotingTime { get; set; } = 90;
