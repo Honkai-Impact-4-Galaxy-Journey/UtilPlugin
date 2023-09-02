@@ -34,7 +34,7 @@ namespace UtilPlugin
             Timing.KillCoroutines(votingcoroutine);
             if (voting)
             {
-                PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>回合已结束", 5, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>回合已结束</size>", 5, Broadcast.BroadcastFlags.Normal, true);
                 voting = false;
             }
         }
@@ -44,7 +44,7 @@ namespace UtilPlugin
             if (voting)
             {
                 Timing.KillCoroutines(votingcoroutine);
-                PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>管理员 {player.Nickname} 强制废除了此次投票", 5, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>管理员强制废除了此次投票</size>", 5, Broadcast.BroadcastFlags.Normal, true);
                 AcceptPlayer = new ConcurrentBag<string>();
                 AgainstPlayer = new ConcurrentBag<string>();
                 Timing.CallDelayed(90f, () => Canvote = true);
@@ -66,11 +66,11 @@ namespace UtilPlugin
             if (votingEvent.OnVotingEnded())
             {
                 votingEvent.Action();
-                PluginAPI.Core.Server.SendBroadcast($"<color=green>「投票通过」</color>{votingEvent.AcceptBroadcast}", 5, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=green>「投票通过」</color>{votingEvent.AcceptBroadcast}</size>", 5, Broadcast.BroadcastFlags.Normal, true);
             }
             else
             {
-                PluginAPI.Core.Server.SendBroadcast($"<color=red>「投票失败」</color>没有足够玩家投票", 5, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>没有足够玩家投票</size>", 5, Broadcast.BroadcastFlags.Normal, true);
             }
             AcceptPlayer = new ConcurrentBag<string>();
             AgainstPlayer = new ConcurrentBag<string>();
@@ -132,7 +132,7 @@ namespace UtilPlugin
             while (time != 0)
             {
                 time--;
-                PluginAPI.Core.Server.SendBroadcast($"<size=20>{player.Nickname}:发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)[{time}]</size>", 1, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=24>{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(double)AcceptPlayer.Count / Server.PlayerCount * 100}%)[{time}]</size>", 1, Broadcast.BroadcastFlags.Normal, true);
                 yield return Timing.WaitForSeconds(1.1f);
             }
             OnVotingEnded(votingEvent);

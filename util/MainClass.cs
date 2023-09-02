@@ -53,6 +53,7 @@ namespace UtilPlugin
             EventHandler.Register(Config.AutoCleanupEnabled);
             ReserveSlot.Register(Config.ReserveSlotEnabled);
             SystemWarhead.Register();
+            Gamemode.Register();
             Voting.OnEnabled(true);
         }
         public override string Author => "Silver Wolf";

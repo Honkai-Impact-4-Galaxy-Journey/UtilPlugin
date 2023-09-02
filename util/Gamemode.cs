@@ -26,10 +26,11 @@ namespace UtilPlugin
             switch (NextMode)
             {
                 case Gamemodes.Normal:
-                    PluginAPI.Core.Server.SendBroadcast("<size=20><color=red>「回合开始」</color>当前回合已经开始</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                    PluginAPI.Core.Server.SendBroadcast("<size=26><color=red>「回合开始」</color>当前回合已经开始</size>", 5, Broadcast.BroadcastFlags.Normal, true);
                     break;
                 case Gamemodes.Other:
-                    PluginAPI.Core.Server.SendBroadcast("<size=20><color=red>「回合开始」</color>本局为娱乐模式</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                    PluginAPI.Core.Server.SendBroadcast("<size=26><color=red>「回合开始」</color>本局为娱乐模式</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                    NextMode = Gamemodes.Normal;
                     break;
             }
         }
