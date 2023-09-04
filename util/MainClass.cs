@@ -10,6 +10,7 @@ using Exiled.API;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.Events;
+using PlayerRoles;
 
 namespace UtilPlugin
 {
@@ -44,6 +45,8 @@ namespace UtilPlugin
         public int VotingTime { get; set; } = 90;
         [Description("允许投票开启娱乐")]
         public bool ArrowVoteFunny { get; set; } = true;
+        [Description("角色最高血量设置")]
+        public Dictionary<RoleTypeId, int> HealthValues { get; set; } = new Dictionary<RoleTypeId, int>() { [RoleTypeId.Scp173] = 4300 };
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
