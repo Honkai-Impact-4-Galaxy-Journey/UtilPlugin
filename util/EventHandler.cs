@@ -51,7 +51,6 @@ namespace UtilPlugin
         {
             if (UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.Player.Role))
             {
-                PluginAPI.Core.Server.SendBroadcast("1", 5);
                 ev.Player.MaxHealth = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
                 ev.Player.Health = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
             }
