@@ -24,7 +24,7 @@ namespace UtilPlugin
         public static void Register(bool value)
         {
             Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
-            Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+            Exiled.Events.Handlers.Player.Spawned += OnChangingRole;
             if (value)
             {
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
@@ -47,14 +47,14 @@ namespace UtilPlugin
             }
         }
         public static Player player;
-        public static void OnChangingRole(ChangingRoleEventArgs ev)
+        public static void OnChangingRole(SpawnedEventArgs ev)
         {
-            if (UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.NewRole))
+            if (UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.Player.Role))
             {
-                ev.Player.MaxHealth = UtilPlugin.Instance.Config.HealthValues[ev.NewRole];
-                ev.Player.Health = UtilPlugin.Instance.Config.HealthValues[ev.NewRole];
+                PluginAPI.Core.Server.SendBroadcast("1", 5);
+                ev.Player.MaxHealth = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
+                ev.Player.Health = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
             }
-            ev.IsAllowed = true;
         }
         public static void OnActivate914(ActivatingEventArgs ev)
         {
