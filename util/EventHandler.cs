@@ -14,6 +14,7 @@ using InventorySystem.Items;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Scp914;
+using Exiled.Events.EventArgs.Player;
 
 namespace UtilPlugin
 {
@@ -23,6 +24,7 @@ namespace UtilPlugin
         public static void Register(bool value)
         {
             Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
+            Exiled.Events.Handlers.Player.Spawned += OnChangingRole;
             if (value)
             {
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
@@ -45,6 +47,14 @@ namespace UtilPlugin
             }
         }
         public static Player player;
+        public static void OnChangingRole(SpawnedEventArgs ev)
+        {
+            if (UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.Player.Role))
+            {
+                ev.Player.MaxHealth = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
+                ev.Player.Health = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
+            }
+        }
         public static void OnActivate914(ActivatingEventArgs ev)
         {
             if (Scp914.Scp914Controller.Singleton.KnobSetting == Scp914.Scp914KnobSetting.Rough)
