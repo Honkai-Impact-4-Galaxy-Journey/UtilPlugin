@@ -24,7 +24,8 @@ namespace UtilPlugin
         public static void Register(bool value)
         {
             Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
-            Exiled.Events.Handlers.Player.Spawned += OnChangingRole;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.Died += OnPlayerDied;
             if (value)
             {
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
@@ -47,7 +48,18 @@ namespace UtilPlugin
             }
         }
         public static Player player;
-        public static void OnChangingRole(SpawnedEventArgs ev)
+        public static void OnPlayerDied(DiedEventArgs ev)
+        {
+            if (ev.Attacker != null && UtilPlugin.Instance.Config.HealHps != null && UtilPlugin.Instance.Config.HealHps.ContainsKey(ev.Attacker.Role))
+            {
+                if (ev.Attacker.Health + UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role] > ev.Attacker.MaxHealth)
+                {
+                    ev.Attacker.Health = ev.Attacker.MaxHealth;
+                }
+                ev.Attacker.Health += UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role];
+            }
+        }
+        public static void OnSpawned(SpawnedEventArgs ev)
         {
             if (UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.Player.Role))
             {
