@@ -47,6 +47,8 @@ namespace UtilPlugin
         public bool ArrowVoteFunny { get; set; } = true;
         [Description("角色最高血量设置")]
         public Dictionary<RoleTypeId, int> HealthValues { get; set; } = new Dictionary<RoleTypeId, int>() { [RoleTypeId.Scp173] = 4300 };
+        [Description("角色杀人回血量")]
+        public Dictionary<RoleTypeId, int> HealHps { get; set; } = new Dictionary<RoleTypeId, int>() { [RoleTypeId.Scp939] = 20 };
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
