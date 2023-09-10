@@ -196,6 +196,14 @@ namespace CommandSystem
                 response = "Done!";
                 return true;
             }
+            if (arguments.At(0) == "true")
+            {
+                UtilPlugin.EventHandler.BypassMaxHealth = true;
+            }
+            else
+            {
+                UtilPlugin.EventHandler.BypassMaxHealth = false;
+            }
             response = "no rainbow";
             return false;
         }

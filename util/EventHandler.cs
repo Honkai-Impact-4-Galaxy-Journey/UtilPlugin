@@ -48,15 +48,19 @@ namespace UtilPlugin
             }
         }
         public static Player player;
+        public static bool BypassMaxHealth;
         public static void OnPlayerDied(DiedEventArgs ev)
         {
             if (ev.Attacker != null && UtilPlugin.Instance.Config.HealHps != null && UtilPlugin.Instance.Config.HealHps.ContainsKey(ev.Attacker.Role))
             {
-                if (ev.Attacker.Health + UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role] > ev.Attacker.MaxHealth)
+                if (ev.Attacker.Health + UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role] >= ev.Attacker.MaxHealth && !BypassMaxHealth)
                 {
                     ev.Attacker.Health = ev.Attacker.MaxHealth;
                 }
-                ev.Attacker.Health += UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role];
+                else
+                {
+                    ev.Attacker.Health += UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role];
+                }
             }
         }
         public static void OnSpawned(SpawnedEventArgs ev)
