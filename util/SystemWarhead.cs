@@ -5,6 +5,7 @@ using MEC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,15 +32,19 @@ namespace UtilPlugin
             }
             if (UtilPlugin.Instance.Config.DetonateOnRoundEnded)
             {
-                Exiled.Events.Handlers.Server.EndingRound += OnRoundEnded;
+                Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             }
             else
             {
-                Exiled.Events.Handlers.Server.EndingRound -= OnRoundEnded;
+                Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            }
+            if (true)
+            {
+                Voting.Register(new VotingEvent { Action = () => Detonate(false), Name = "systemwarhead", Description = "启动系统核[55%]", VotingDes = "系统核弹", Votingpercent = 0.55, AcceptBroadcast = "系统核弹已经启动", CheckBeforeVoting = () => { return true; }, OnVotingEnded = () => { return ((double)Voting.AcceptPlayer.Count + (double)(Server.PlayerCount - Voting.AcceptPlayer.Count - Voting.AgainstPlayer.Count)*0.3) / Server.PlayerCount >= 0.55; } });
             }
         }
 
-        public static void OnRoundEnded(EndingRoundEventArgs ev)
+        public static void OnRoundEnded(RoundEndedEventArgs roundEndedEventArgs)
         {
             Warhead.Detonate();
         }

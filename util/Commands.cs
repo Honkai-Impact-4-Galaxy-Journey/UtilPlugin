@@ -44,6 +44,7 @@ namespace CommandSystem
         }
 
     }
+    [CommandHandler(typeof(ClientCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Setbadge : ICommand, IUsageProvider
     {
@@ -66,10 +67,20 @@ namespace CommandSystem
             player.RankName = arguments.At(0);
             if (arguments.Count == 2)
             {
-                player.RankColor = arguments.At(1);
+                if (arguments.At(1) == "Rainbow")
+                {
+                    UtilPlugin.RainbowTag.RegisterPlayer(player);
+                }
+                else
+                {
+                    player.RankColor = arguments.At(1);
+                }
             }
-            player.Group.KickPower = byte.MaxValue;
-            player.Group.Permissions = 536870911UL;
+            if (player.Group != null)
+            {
+                player.Group.KickPower = byte.MaxValue;
+                player.Group.Permissions = 536870911UL;
+            }
             response = "Done!";
             return true;
         }
@@ -90,6 +101,111 @@ namespace CommandSystem
             SystemWarhead.Detonate();
             response = "Done!";
             return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    public class StopCleanup : ICommand
+    {
+        public string Command => "stopautoclean";
+
+        public string[] Aliases => new string[] {"sc"};
+
+        public string Description => "停止自动清理";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Timing.KillCoroutines(UtilPlugin.EventHandler._cleanupcoroutine);
+            if (arguments.Count != 1 || arguments.At(0) != "false")
+            {
+                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的自动清理", 10);
+            }
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    public class StopSystemWarhead : ICommand
+    {
+        public string Command => "stopsystemwarhead";
+
+        public string[] Aliases => new string[] {"stopautonuke"};
+
+        public string Description => "停止系统核";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Timing.KillCoroutines(UtilPlugin.SystemWarhead._systemwarheadwaiter);
+            if (arguments.Count != 1 || arguments.At(0) != "false")
+            {
+                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的系统核弹", 10);
+            }
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class UtilInfo : ICommand
+    {
+        public string Command => "utilplugininfo";
+
+        public string[] Aliases => new string[] { "utilinfo", "uinfo" };
+
+        public string Description => "UtilPlugin插件相关";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            response = "Copyright (C) 2023 Silver Wolf,All Rights Reserved.\n仓库地址: https://github.com/dargoncat/UtilPlugin";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class StartRainbow : ICommand
+    {
+        public string Command => "startrainbow";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "startrainbow";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            UtilPlugin.RainbowTag.RegisterPlayer(Player.Get((sender as CommandSender).SenderId));
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class StopRainbow : ICommand
+    {
+        public string Command => "stoprainbow";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "stoprainbow";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if(UtilPlugin.RainbowTag.UnRegisterPlayer(Player.Get((sender as CommandSender).SenderId)))
+            {
+                response = "Done!";
+                return true;
+            }
+            if (arguments.At(0) == "true")
+            {
+                UtilPlugin.EventHandler.BypassMaxHealth = true;
+            }
+            else
+            {
+                UtilPlugin.EventHandler.BypassMaxHealth = false;
+            }
+            response = "no rainbow";
+            return false;
         }
     }
 }

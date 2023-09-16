@@ -1,6 +1,5 @@
 ﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
 using Exiled.Events.EventArgs.Server;
-using PluginAPI.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,39 +14,86 @@ using InventorySystem.Items;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Scp914;
+using Exiled.Events.EventArgs.Player;
 
 namespace UtilPlugin
 {
     public class EventHandler
     {
-        private static CoroutineHandle _cleanupcoroutine;
+        public static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
         {
+            Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            Exiled.Events.Handlers.Player.Died += OnPlayerDied;
             if (value)
+            {
+                Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
+                Exiled.Events.Handlers.Scp914.Activating += OnActivate914;
+            }
+            else
+            {
+                Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= Show914;
+                Exiled.Events.Handlers.Scp914.Activating -= OnActivate914;
+            }
+            if (UtilPlugin.Instance.Config.EnableAutoCleanup)
             {
                 Exiled.Events.Handlers.Server.RoundStarted += Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound += Stopcleanup;
-                Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
             }
             else
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
-                Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= Show914;
             }
+        }
+        public static Player player;
+        public static bool BypassMaxHealth;
+        public static void OnPlayerDied(DiedEventArgs ev)
+        {
+            if (ev.Attacker != null && UtilPlugin.Instance.Config.HealHps != null && UtilPlugin.Instance.Config.HealHps.ContainsKey(ev.Attacker.Role))
+            {
+                if (ev.Attacker.Health + UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role] >= ev.Attacker.MaxHealth && !BypassMaxHealth)
+                {
+                    ev.Attacker.Health = ev.Attacker.MaxHealth;
+                }
+                else
+                {
+                    ev.Attacker.Health += UtilPlugin.Instance.Config.HealHps[ev.Attacker.Role];
+                }
+            }
+        }
+        public static void OnSpawned(SpawnedEventArgs ev)
+        {
+            if (UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.Player.Role))
+            {
+                ev.Player.MaxHealth = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
+                ev.Player.Health = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
+            }
+        }
+        public static void OnActivate914(ActivatingEventArgs ev)
+        {
+            if (Scp914.Scp914Controller.Singleton.KnobSetting == Scp914.Scp914KnobSetting.Rough)
+            {
+                ServerConsole.AddLog($"[Warning]{ev.Player.Nickname}({ev.Player.UserId})activated 914 as {Scp914.Scp914Controller.Singleton.KnobSetting} mode", ConsoleColor.Yellow);
+                return;
+            }
+            ServerConsole.AddLog($"{ev.Player.Nickname}({ev.Player.UserId})activated 914 as {Scp914.Scp914Controller.Singleton.KnobSetting} mode");
         }
 
         public static void Show914(ChangingKnobSettingEventArgs ev)
         {
             if (ev.KnobSetting == Scp914.Scp914KnobSetting.Rough)
             {
-                ServerConsole.AddLog($"[Warning]{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}");
+                ServerConsole.AddLog($"[Warning]{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}",ConsoleColor.Yellow);
+                player = ev.Player;
                 return;
             }
             ServerConsole.AddLog($"{ev.Player.Nickname}({ev.Player.UserId})changes the 914 mode to {ev.KnobSetting}");
         }
+        
         static bool Flag;
-        private static void Stopcleanup()
+        public static void Stopcleanup()
         {
             Timing.KillCoroutines(_cleanupcoroutine);
         }
@@ -59,7 +105,7 @@ namespace UtilPlugin
         }
         public static bool IsSCPitem(ItemType type)
         {
-            return type == ItemType.SCP330 || type == ItemType.SCP500 || type == ItemType.SCP268 || type == ItemType.SCP2176 || type == ItemType.SCP207 || type == ItemType.SCP1853 || type == ItemType.SCP1576 || type == ItemType.SCP018;
+            return type == ItemType.SCP330 || type == ItemType.SCP500 || type == ItemType.SCP268 || type == ItemType.SCP244a || type==ItemType.SCP244b || type == ItemType.SCP2176 || type == ItemType.SCP207 || type == ItemType.SCP1853 || type == ItemType.SCP1576 || type == ItemType.SCP018;
         }
         public static IEnumerator<float> cleanupwaiter(float delay)
         {

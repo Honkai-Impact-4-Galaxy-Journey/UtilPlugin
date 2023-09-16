@@ -10,6 +10,7 @@ using Exiled.API;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
 using Exiled.Events;
+using PlayerRoles;
 
 namespace UtilPlugin
 {
@@ -20,6 +21,8 @@ namespace UtilPlugin
         public bool Debug { get; set; }
         [Description("是否启用自动清理")]
         public bool AutoCleanupEnabled { get; set; } = true;
+        [Description("是否启用自动清理")]
+        public bool EnableAutoCleanup { get; set; } = true;
         [Description("每次自动清理的时间（以秒为单位）")]
         public float Cleanuptime { get; set; } = 500;
         [Description("是否启用系统核弹")]
@@ -36,6 +39,16 @@ namespace UtilPlugin
         public int Slots { get; set; } = 5;
         [Description("预留位踢出理由")]
         public string ReserveSlotKickReason { get; set; } = "服务器已满人";
+        [Description("允许投票提前开启系统核(Disabled)")]
+        public bool AllowVoteSystemWarhead { get; set; } = true;
+        [Description("投票时长")]
+        public int VotingTime { get; set; } = 90;
+        [Description("允许投票开启娱乐")]
+        public bool ArrowVoteFunny { get; set; } = true;
+        [Description("角色最高血量设置")]
+        public Dictionary<RoleTypeId, int> HealthValues { get; set; } = new Dictionary<RoleTypeId, int>() { [RoleTypeId.Scp173] = 4300 };
+        [Description("角色杀人回血量")]
+        public Dictionary<RoleTypeId, int> HealHps { get; set; } = new Dictionary<RoleTypeId, int>() { [RoleTypeId.Scp939] = 20 };
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
@@ -45,10 +58,12 @@ namespace UtilPlugin
             EventHandler.Register(Config.AutoCleanupEnabled);
             ReserveSlot.Register(Config.ReserveSlotEnabled);
             SystemWarhead.Register();
+            Gamemode.Register();
+            Voting.OnEnabled(true);
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
-        public override Version Version => new Version(1,2,3);
+        public override Version Version => new Version(1,3,1);
         public static UtilPlugin Instance { get; private set; }
         public UtilPlugin()
         {
