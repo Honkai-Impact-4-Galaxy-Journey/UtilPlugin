@@ -208,4 +208,24 @@ namespace CommandSystem
             return false;
         }
     }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class SetScale : ICommand, IUsageProvider
+    {
+        public string Command => "setscale";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public string[] Usage => new string[] { "id", "big" };
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(int.Parse(arguments.At(0)));
+            float f = float.Parse(arguments.At(1));
+            player.Scale = new UnityEngine.Vector3(f, f, f);
+            response = "Done!";
+            return true;
+        }
+    }
 }
