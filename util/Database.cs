@@ -16,7 +16,7 @@ namespace UtilPlugin
             {
                 connection.Open();
                 badges.Clear();
-                using (MySqlCommand command = new MySqlCommand("select * from `badge`"))
+                using (MySqlCommand command = new MySqlCommand("select * from `badge`", connection))
                 {
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
@@ -35,7 +35,6 @@ namespace UtilPlugin
                 }
             }
         }
-
         public static Badge GetBadge(string userid)
         {
             return badges.Find(x => x.userid == userid);
@@ -48,5 +47,9 @@ namespace UtilPlugin
         public string reverseslot;
         public string adminrank;
         public string userid;
+        public override string ToString()
+        {
+            return $"text:{text}, color:{color}, adminrank: {adminrank}";
+        }
     }
 }
