@@ -246,6 +246,7 @@ namespace CommandSystem
         }
     }
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
     public class AcceptVote : ICommand
     {
         public string Command => "acceptvote";
