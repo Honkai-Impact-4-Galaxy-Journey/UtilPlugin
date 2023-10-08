@@ -15,6 +15,7 @@ namespace UtilPlugin
         public static ConcurrentBag<string> AcceptPlayer, AgainstPlayer;
         public static bool Canvote = false, voting = false;
         public static CoroutineHandle votingcoroutine;
+        public static bool Accepted;
         public static void OnEnabled(bool value)
         {
             if (value)
@@ -63,7 +64,7 @@ namespace UtilPlugin
         public static void OnVotingEnded(VotingEvent votingEvent)
         {
             voting = false;
-            if (votingEvent.OnVotingEnded())
+            if (votingEvent.OnVotingEnded() || Accepted)
             {
                 votingEvent.Action();
                 PluginAPI.Core.Server.SendBroadcast($"<size=24><color=green>「投票通过」</color>{votingEvent.AcceptBroadcast}</size>", 5, Broadcast.BroadcastFlags.Normal, true);
@@ -72,6 +73,7 @@ namespace UtilPlugin
             {
                 PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>没有足够玩家投票</size>", 5, Broadcast.BroadcastFlags.Normal, true);
             }
+            Accepted = false;
             AcceptPlayer = new ConcurrentBag<string>();
             AgainstPlayer = new ConcurrentBag<string>();
             Timing.CallDelayed(90f, () => Canvote = true);
@@ -122,13 +124,9 @@ namespace UtilPlugin
             }
             return ("成功！", true);
         }
-        public static IEnumerator<float> ForceAccept(int a)
+        public static void ForceAccept(bool b)
         {
-            for (int i = 0; i < a; i++)
-            {
-                AcceptPlayer.Add($"{i}");
-                if (i % 2 == 0) yield return Timing.WaitForSeconds(1);
-            }
+            Accepted = b;
         }
         public static IEnumerator<float> SendBroadcast(VotingEvent votingEvent, Player player)
         {
@@ -136,7 +134,7 @@ namespace UtilPlugin
             while (time != 0)
             {
                 time--;
-                PluginAPI.Core.Server.SendBroadcast($"<size=28>{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(int)((double)AcceptPlayer.Count / Server.PlayerCount * 100)}%)[{time}]</size>", 1, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=28>{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(int)((double)AcceptPlayer.Count / (AcceptPlayer.Count + AgainstPlayer.Count) * 100)}%)[{time}]</size>", 1, Broadcast.BroadcastFlags.Normal, true);
                 yield return Timing.WaitForSeconds(1.1f);
             }
             OnVotingEnded(votingEvent);
@@ -257,12 +255,16 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if(arguments.Count == 0)
+            {
+                response = "require 1 argument!(true or false)";
+            }
             if (!UtilPlugin.Voting.voting)
             {
                 response = "当前无进行中投票！";
                 return false;
             }
-            Timing.RunCoroutine(UtilPlugin.Voting.ForceAccept(Server.PlayerCount / 2));
+            UtilPlugin.Voting.ForceAccept(bool.Parse(arguments.At(0)));
             response = "Done!";
             return true;
         }
