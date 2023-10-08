@@ -49,6 +49,10 @@ namespace UtilPlugin
         public Dictionary<RoleTypeId, int> HealthValues { get; set; } = new Dictionary<RoleTypeId, int>() { [RoleTypeId.Scp173] = 4300 };
         [Description("角色杀人回血量")]
         public Dictionary<RoleTypeId, int> HealHps { get; set; } = new Dictionary<RoleTypeId, int>() { [RoleTypeId.Scp939] = 20 };
+        [Description("是否启用MySQL支持")]
+        public bool MysqlEnabled { get; set; } = false;
+        [Description("MySQL 连接字符串")]
+        public string MysqlConnectstring { get; set; } = "Server=127.0.0.1;Database=scp5;User=root;Password=awaawa;Charset=utf8";
     }
     public class UtilPlugin : Plugin<PluginConfig>
     {
@@ -60,6 +64,10 @@ namespace UtilPlugin
             SystemWarhead.Register();
             Gamemode.Register();
             Voting.OnEnabled(true);
+            if (Config.MysqlEnabled)
+            {
+                Database.Update(Config.MysqlConnectstring);
+            }
         }
         public override string Author => "Silver Wolf";
         public override string Name => "UtilPlugin";
