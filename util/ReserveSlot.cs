@@ -19,15 +19,30 @@ namespace UtilPlugin
         {
             if (reg)
             {
-                Exiled.Events.Handlers.Player.Joined += Joining;
+                Exiled.Events.Handlers.Player.PreAuthenticating += OnPreAuthenticating;
                 Exiled.Events.Handlers.Player.Left += Disconnecting;
                 Exiled.Events.Handlers.Server.RestartingRound += RoundRestart;
             }
             else
             {
-                Exiled.Events.Handlers.Player.Joined -= Joining;
+                Exiled.Events.Handlers.Player.PreAuthenticating -= OnPreAuthenticating;
                 Exiled.Events.Handlers.Player.Left -= Disconnecting;
                 Exiled.Events.Handlers.Server.RestartingRound -= RoundRestart;
+            }
+        }
+
+        public static void OnPreAuthenticating(PreAuthenticatingEventArgs ev)
+        {
+            if (Server.PlayerCount + Remain >= Server.MaxPlayerCount)
+            {
+                if (!CheckPermission(ev.UserId))
+                {
+                    ev.Reject(UtilPlugin.Instance.Config.ReserveSlotKickReason, true);
+                }
+                else
+                {
+                    Remain--;
+                }
             }
         }
 
@@ -46,9 +61,9 @@ namespace UtilPlugin
                 Remain = UtilPlugin.Instance.Config.Slots;
                 foreach (Player player in Player.List)
                 {
-                    if (ReserveSlot.CheckPermission(player))
+                    if (CheckPermission(player.UserId))
                     {
-                        ReserveSlot.Remain--;
+                        Remain--;
                     }
                 }
             }
@@ -56,20 +71,15 @@ namespace UtilPlugin
 
         public static void Disconnecting(LeftEventArgs ev)
         {
-            if (CheckPermission(ev.Player))
+            if (CheckPermission(ev.Player.UserId))
             {
                 Remain++;
             }
         }
 
-        public static void Joining(JoinedEventArgs ev)
+        public static bool CheckPermission(string userid)
         {
-            Timing.RunCoroutine(Checkid(ev.Player));
-        }
-
-        public static bool CheckPermission(Player player)
-        {
-            if (!(player.Group == null) && (player.Group.Permissions & (ulong)PlayerPermissions.AFKImmunity) != 0)
+            if (string.Equals("yes", Database.GetBadge(userid).reverseslot, StringComparison.CurrentCultureIgnoreCase))
             {
                 return true;
             }
@@ -77,29 +87,6 @@ namespace UtilPlugin
             {
                 return false;
             }
-        }
-
-        public static IEnumerator<float> Checkid(Player player)
-        {
-            yield return Timing.WaitForSeconds(10);
-            if (Server.PlayerCount > Server.MaxPlayerCount - Remain)
-            {
-                if (!CheckPermission(player))
-                {
-                    player.Disconnect(UtilPlugin.Instance.Config.ReserveSlotKickReason);
-                    yield break;
-                }
-                else
-                {
-                    Remain--;
-                    yield break;
-                }
-            }
-            if (CheckPermission(player))
-            {
-                Remain--;
-            }
-
         }
     }
 }
@@ -120,7 +107,7 @@ namespace CommandSystem
             UtilPlugin.ReserveSlot.RoundRestart();
             foreach (Player player in Player.List)
             {
-                if (UtilPlugin.ReserveSlot.CheckPermission(player))
+                if (UtilPlugin.ReserveSlot.CheckPermission(player.UserId))
                 {
                     UtilPlugin.ReserveSlot.Remain--;
                 }
