@@ -30,6 +30,7 @@ namespace CommandSystem
             }
             else
             {
+                player.ClearInventory();
                 if (arguments.Count == 0)
                 {
                     player.Kill(DeathReason);

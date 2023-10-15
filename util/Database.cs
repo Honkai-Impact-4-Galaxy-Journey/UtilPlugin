@@ -27,7 +27,8 @@ namespace UtilPlugin
                                 color = reader.GetString("color"),
                                 reverseslot = reader.GetString("reserveslot"),
                                 adminrank = reader.GetString("admin"),
-                                userid = reader.GetString("userid")
+                                userid = reader.GetString("userid"),
+                                cover = reader.GetBoolean("cover")
                             };
                             badges.Add(badge);
                         }
@@ -47,6 +48,7 @@ namespace UtilPlugin
         public string reverseslot;
         public string adminrank;
         public string userid;
+        public bool cover;
         public override string ToString()
         {
             return $"text:{text}, color:{color}, adminrank: {adminrank}";

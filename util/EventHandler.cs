@@ -72,7 +72,18 @@ namespace UtilPlugin
             {
                 player.SetRank(badge.adminrank, Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank));
             }
-            player.RankName = badge.text;
+            if (badge.text != "none")
+            {
+                if (badge.cover || string.IsNullOrEmpty(player.RankName))
+                {
+                    player.RankName = badge.text;
+                }
+                else
+                {
+                    player.RankName += $"*{badge.text}*";
+                }
+            }
+            
             if (string.Equals(badge.color,"rainbow",StringComparison.CurrentCultureIgnoreCase))
             {
                 RainbowTag.RegisterPlayer(player);
