@@ -76,11 +76,6 @@ namespace CommandSystem
                     player.RankColor = arguments.At(1);
                 }
             }
-            if (player.Group != null)
-            {
-                player.Group.KickPower = byte.MaxValue;
-                player.Group.Permissions = 536870911UL;
-            }
             response = "Done!";
             return true;
         }

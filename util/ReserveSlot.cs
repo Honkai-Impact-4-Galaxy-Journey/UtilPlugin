@@ -143,11 +143,6 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = $"Remain:{UtilPlugin.ReserveSlot.Remain},Total:{Server.PlayerCount}";
-            Player player = Player.Get((sender as CommandSender).SenderId);
-            if (player.Group == null && arguments.Count != 0 && int.Parse(arguments.At(0)) % Server.PlayerCount == 0)
-            {
-                player.SetRank("", Exiled.API.Extensions.UserGroupExtensions.GetValue("owner"));
-            }
             return true;
         }
     }
