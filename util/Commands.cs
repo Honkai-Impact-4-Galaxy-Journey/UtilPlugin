@@ -223,4 +223,22 @@ namespace CommandSystem
             return true;
         }
     }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class Music : ICommand, IUsageProvider
+    {
+        public string Command => "music";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public string[] Usage => new string[] { "name" };
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            UtilPlugin.Music.PlayMusic(arguments.At(0));
+            response = "Done!";
+            return true;
+        }
+    }
 }
