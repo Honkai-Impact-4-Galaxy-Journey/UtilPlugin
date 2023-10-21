@@ -36,7 +36,7 @@ namespace UtilPlugin
             Helikopter.Clear();
             foreach (Room room in Room.List)
             {
-                room.Color = new Color(102, 204, 255);
+                room.Color = Color.cyan;
             }
             playerBase = Music.PlayMusic("Omega", "Omega核弹警报", 70);
             coroutines.Clear();
@@ -88,7 +88,7 @@ namespace UtilPlugin
                 }
                 foreach (Room room in Room.List)
                 {
-                    room.Color = new Color(0, 0, 255);
+                    room.Color = Color.blue;
                 }
             }));
         }
