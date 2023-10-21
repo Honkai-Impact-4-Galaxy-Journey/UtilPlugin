@@ -223,14 +223,15 @@ namespace CommandSystem
             return true;
         }
     }
+
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Music : ICommand, IUsageProvider
     {
-        public string Command => "music";
+        public string Command => "startmusic";
 
         public string[] Aliases => Array.Empty<string>();
 
-        public string Description => "";
+        public string Description => " ";
 
         public string[] Usage => new string[] { "name" };
 
@@ -241,7 +242,7 @@ namespace CommandSystem
                 response = "";
                 return false;
             }
-            UtilPlugin.Music.PlayMusic(arguments.At(0));
+            UtilPlugin.Music.PlayMusic(arguments.At(0), arguments.At(1), int.Parse(arguments.At(2)));
             response = "Done!";
             return true;
         }

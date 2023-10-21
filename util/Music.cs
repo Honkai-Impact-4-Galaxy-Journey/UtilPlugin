@@ -29,7 +29,7 @@ namespace UtilPlugin
     }
     public class Music
     {
-        public static void PlayMusic(string name)
+        public static void PlayMusic(string musicname, string name, int vol)
         {
             GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
             System.Random rand = new System.Random();
@@ -37,21 +37,21 @@ namespace UtilPlugin
             FakeConnection connection = new FakeConnection(num);
             ReferenceHub referenceHub = gameObject.GetComponent<ReferenceHub>();
             NetworkServer.AddPlayerForConnection(connection, gameObject);
-            referenceHub.characterClassManager._privUserId = $"Music-{num}@Server";
-            referenceHub.characterClassManager.InstanceMode = ClientInstanceMode.Unverified;
             try
             {
-                referenceHub.nicknameSync.SetNick("HOYO-Mix");
+                referenceHub.nicknameSync.DisplayName = name;
+                referenceHub.characterClassManager.UserIdHook("", "ID_Dedicated");
+                referenceHub.characterClassManager.UserId = $"{musicname}-Music{num}@Server";
             }
             catch
             {
 
             }
             AudioPlayerBase playerbase = AudioPlayerBase.Get(referenceHub);
-            string text = Paths.Plugins + $"\\{name}.ogg";
+            string text = Paths.Plugins + $"\\{musicname}.ogg";
             playerbase.Enqueue(text, -1);
             playerbase.LogDebug = false;
-            playerbase.Volume = 70;
+            playerbase.Volume = vol;
             foreach (Player player in Player.List)
             {
                 playerbase.BroadcastTo.Add(player.Id);
