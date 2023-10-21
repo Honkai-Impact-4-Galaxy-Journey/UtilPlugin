@@ -29,7 +29,7 @@ namespace UtilPlugin
     }
     public class Music
     {
-        public static void PlayMusic(string musicname, string name, int vol)
+        public static AudioPlayerBase PlayMusic(string musicname, string name, int vol)
         {
             GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
             System.Random rand = new System.Random();
@@ -58,6 +58,7 @@ namespace UtilPlugin
             }
             playerbase.Loop = false;
             playerbase.Play(-1);
+            return playerbase;
         }
     }
 }
