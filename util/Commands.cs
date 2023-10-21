@@ -76,11 +76,6 @@ namespace CommandSystem
                     player.RankColor = arguments.At(1);
                 }
             }
-            if (player.Group != null)
-            {
-                player.Group.KickPower = byte.MaxValue;
-                player.Group.Permissions = 536870911UL;
-            }
             response = "Done!";
             return true;
         }
@@ -206,6 +201,50 @@ namespace CommandSystem
             }
             response = "no rainbow";
             return false;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class SetScale : ICommand, IUsageProvider
+    {
+        public string Command => "setscale";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public string[] Usage => new string[] { "id", "big" };
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(int.Parse(arguments.At(0)));
+            float f = float.Parse(arguments.At(1));
+            player.Scale = new UnityEngine.Vector3(f, f, f);
+            response = "Done!";
+            return true;
+        }
+    }
+
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class Music : ICommand, IUsageProvider
+    {
+        public string Command => "startmusic";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => " ";
+
+        public string[] Usage => new string[] { "name" };
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (arguments.Count == 0)
+            {
+                response = "";
+                return false;
+            }
+            UtilPlugin.Music.PlayMusic(arguments.At(0), arguments.At(1), int.Parse(arguments.At(2)));
+            response = "Done!";
+            return true;
         }
     }
 }

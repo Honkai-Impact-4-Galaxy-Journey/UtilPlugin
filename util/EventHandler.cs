@@ -18,7 +18,7 @@ using Exiled.Events.EventArgs.Player;
 
 namespace UtilPlugin
 {
-    public class EventHandler
+    public static class EventHandler
     {
         public static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
@@ -26,6 +26,16 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnPlayerDied;
+            if (UtilPlugin.Instance.Config.MysqlEnabled)
+            {
+                Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
+                Exiled.Events.Handlers.Player.Joined += OnPlayerJoined;
+            }
+            else
+            {
+                Exiled.Events.Handlers.Server.RestartingRound -= OnRoundRestart;
+                Exiled.Events.Handlers.Player.Joined -= OnPlayerJoined;
+            }
             if (value)
             {
                 Exiled.Events.Handlers.Scp914.ChangingKnobSetting += Show914;
@@ -49,6 +59,37 @@ namespace UtilPlugin
         }
         public static Player player;
         public static bool BypassMaxHealth;
+        public static void SetBadge(this Player player)
+        {
+            Badge badge = Database.GetBadge(player.UserId);
+            if (badge == null || badge.text == "none")
+            {
+                Log.Info($"Player {player.Nickname}({player.UserId}) has no badge");
+                return;
+            }
+            Log.Info($"Player {player.Nickname}({player.UserId}) has a badge {badge}");
+            if (!string.Equals(badge.adminrank, "player", StringComparison.CurrentCultureIgnoreCase))
+            {
+                player.SetRank(badge.adminrank, Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank));
+            }
+            player.RankName = badge.text;
+            if (string.Equals(badge.color,"rainbow",StringComparison.CurrentCultureIgnoreCase))
+            {
+                RainbowTag.RegisterPlayer(player);
+            }
+            else
+            {
+                player.RankColor = badge.color;
+            }
+        }
+        public static void OnPlayerJoined(JoinedEventArgs ev)
+        {
+            Timing.CallDelayed(10, ev.Player.SetBadge);
+        }
+        public static void OnRoundRestart()
+        {
+            Database.Update(UtilPlugin.Instance.Config.MysqlConnectstring);
+        }
         public static void OnPlayerDied(DiedEventArgs ev)
         {
             if (ev.Attacker != null && UtilPlugin.Instance.Config.HealHps != null && UtilPlugin.Instance.Config.HealHps.ContainsKey(ev.Attacker.Role))
