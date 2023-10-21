@@ -236,6 +236,11 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (arguments.Count == 0)
+            {
+                response = "";
+                return false;
+            }
             UtilPlugin.Music.PlayMusic(arguments.At(0));
             response = "Done!";
             return true;
