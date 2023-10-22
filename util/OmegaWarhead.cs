@@ -39,7 +39,7 @@ namespace UtilPlugin
             }
             Warhead.Stop();
             Warhead.IsLocked = true;
-            PluginAPI.Core.Server.SendBroadcast("<b><color=red>OMEGA核弹已启用.</color></b>\n请搭乘撤离直升机或前往地下掩体逃生.", 10);
+            PluginAPI.Core.Server.SendBroadcast("<b><color=red>OMEGA核弹已启用.</color></b>\n请搭乘撤离直升机或前往地下掩体逃生.", 20);
             OmegaActivated = true;
             Shelted.Clear();
             Helikopter.Clear();

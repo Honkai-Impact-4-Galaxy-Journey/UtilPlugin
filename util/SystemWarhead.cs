@@ -48,6 +48,7 @@ namespace UtilPlugin
         public static void OnRoundEnded(RoundEndedEventArgs roundEndedEventArgs)
         {
             Timing.CallDelayed(5, () => { Warhead.Detonate(); });
+            OmegaWarhead.StopOmega();
         }
 
         public static void OnRoundFinished()
