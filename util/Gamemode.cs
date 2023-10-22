@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿//Copyright (C) Silver Wolf 2023,All Rights Reserved.
+using Exiled.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;

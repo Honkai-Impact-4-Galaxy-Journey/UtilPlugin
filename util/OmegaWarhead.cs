@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿//Copyright (C) Silver Wolf 2023,All Rights Reserved.
+using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using MEC;
 using Respawning;
@@ -24,13 +25,21 @@ namespace UtilPlugin
             if (OmegaActivated)
             {
                 foreach (CoroutineHandle coroutineHandle in coroutines) Timing.KillCoroutines(coroutineHandle);
-                playerBase.StopAllCoroutines();
+                playerBase.Stoptrack(true);
                 Cassie.Message("pitch_0.9 Omega Warhead detonation stopped");
                 foreach (Room room in Room.List) room.ResetColor();
+                OmegaActivated = false;
             }
         }
         public static void ActivateOmega()
         {
+            if (OmegaActivated)
+            {
+                return;
+            }
+            Warhead.Stop();
+            Warhead.IsLocked = true;
+            PluginAPI.Core.Server.SendBroadcast("<b><color=red>OMEGA核弹已启用.</color></b>\n请搭乘撤离直升机或前往地下掩体逃生.", 10);
             OmegaActivated = true;
             Shelted.Clear();
             Helikopter.Clear();
@@ -43,17 +52,26 @@ namespace UtilPlugin
             coroutines.Add(Timing.CallDelayed(150, () => { 
                 foreach(Door door in Door.List)
                 {
-                    if(door.IsCheckpoint || door.IsGate)
+                    switch (door.Type)
                     {
-                        door.IsOpen = true;
-                        door.Lock(120, Exiled.API.Enums.DoorLockType.Warhead);
+                        case Exiled.API.Enums.DoorType.CheckpointEzHczA:
+                        case Exiled.API.Enums.DoorType.CheckpointEzHczB:
+                        case Exiled.API.Enums.DoorType.CheckpointLczA:
+                        case Exiled.API.Enums.DoorType.CheckpointLczB:
+                        case Exiled.API.Enums.DoorType.GateA:
+                        case Exiled.API.Enums.DoorType.GateB:
+                            door.IsOpen = true;
+                            door.Lock(120, Exiled.API.Enums.DoorLockType.Warhead);
+                            break;
                     }
                 }
+                PluginAPI.Core.Server.SendBroadcast("Door opened", 3, Broadcast.BroadcastFlags.AdminChat);
             }));
-            coroutines.Add(Timing.CallDelayed(161, () => {
-            RespawnEffectsController.ExecuteAllEffects(RespawnEffectsController.EffectType.Selection, SpawnableTeamType.NineTailedFox);
+            coroutines.Add(Timing.CallDelayed(165, () => {
+                PluginAPI.Core.Server.SendBroadcast("撤离直升机将在12秒后到达", 12);
+                RespawnEffectsController.ExecuteAllEffects(RespawnEffectsController.EffectType.Selection, SpawnableTeamType.NineTailedFox);
             }));
-            coroutines.Add(Timing.CallDelayed(179, () =>
+            coroutines.Add(Timing.CallDelayed(177, () =>
             {
                 foreach (Player player in Player.List)
                 {
@@ -64,16 +82,17 @@ namespace UtilPlugin
                         player.EnableEffect(Exiled.API.Enums.EffectType.Flashed, 5);
                     }
                     Vector3 Helikopterpos = new Vector3(126, 995, -44);
-                    if (Vector3.Distance(player.Position, Helikopterpos) <= 10)
+                    if (Vector3.Distance(player.Position, Helikopterpos) <= 12)
                     {
                         player.Broadcast(4, "You escaped in the helicopter.");
                         Helikopter.Add(player);
-                        player.EnableEffect(Exiled.API.Enums.EffectType.Ensnared, 8);
-                        player.EnableEffect(Exiled.API.Enums.EffectType.Flashed, 8);
+                        player.EnableEffect(Exiled.API.Enums.EffectType.Ensnared, 12);
+                        player.EnableEffect(Exiled.API.Enums.EffectType.Flashed, 12);
                     }
                 }
+                PluginAPI.Core.Server.SendBroadcast($"{Helikopter.Count} player fly and {Shelted.Count} player shelted", 3, Broadcast.BroadcastFlags.AdminChat);
             }));
-            coroutines.Add(Timing.CallDelayed(180, () =>
+            coroutines.Add(Timing.CallDelayed(184, () =>
             {
                 foreach(Player player in Player.List)
                 {
@@ -84,7 +103,7 @@ namespace UtilPlugin
                 }
                 foreach(Player player in Shelted)
                 {
-                    player.Teleport(new Vector3(126, 998, -41));
+                    player.Teleport(new Vector3(29.7f, 992.2f, -25.3f));
                 }
                 foreach (Room room in Room.List)
                 {
