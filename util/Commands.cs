@@ -247,4 +247,37 @@ namespace CommandSystem
             return true;
         }
     }
+
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class Uaow : ICommand
+    {
+        public string Command => "uaow";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            OmegaWarhead.ActivateOmega();
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class Usow : ICommand
+    {
+        public string Command => "usow";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            OmegaWarhead.StopOmega();
+            response = "Done!";
+            return true;
+        }
+    }
 }

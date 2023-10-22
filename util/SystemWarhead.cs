@@ -20,15 +20,15 @@ namespace UtilPlugin
         }
         public static void Register()
         {
-            if (UtilPlugin.Instance.Config.SystemWarheadEnabled)
+            if (UtilPlugin.Instance.Config.SystemWarheadEnabled != SystemWarheadMode.none)
             {
-                Exiled.Events.Handlers.Server.RoundStarted += SystemWarhead.OnRoundStarted;
-                Exiled.Events.Handlers.Server.RestartingRound += SystemWarhead.OnRoundFinished;
+                Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
+                Exiled.Events.Handlers.Server.RestartingRound += OnRoundFinished;
             }
             else
             {
-                Exiled.Events.Handlers.Server.RoundStarted -= SystemWarhead.OnRoundStarted;
-                Exiled.Events.Handlers.Server.RestartingRound -= SystemWarhead.OnRoundFinished;
+                Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
+                Exiled.Events.Handlers.Server.RestartingRound -= OnRoundFinished;
             }
             if (UtilPlugin.Instance.Config.DetonateOnRoundEnded)
             {
@@ -41,13 +41,14 @@ namespace UtilPlugin
             if (true)
             {
                 Voting.Register(new VotingEvent { Action = () => Detonate(false), Name = "sw", Description = "启动系统核[60%]", VotingDes = "系统核弹", Votingpercent = 0.55, AcceptBroadcast = "系统核弹已经启动", CheckBeforeVoting = () => { return true; }, OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.6; } });
-                Voting.Register(new VotingEvent { Action = () => ServerConsole.EnterCommand("aow"), Name = "omega", Description = "启动Omega核弹", VotingDes = "启动Omega核弹", AcceptBroadcast = "Omega核弹已启动", CheckBeforeVoting = () => true, OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.7; } });
+                Voting.Register(new VotingEvent { Action = () => OmegaWarhead.ActivateOmega(), Name = "omega", Description = "启动Omega核弹", VotingDes = "启动Omega核弹", AcceptBroadcast = "Omega核弹已启动", CheckBeforeVoting = () => true, OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.7; } });
             }
         }
 
         public static void OnRoundEnded(RoundEndedEventArgs roundEndedEventArgs)
         {
             Timing.CallDelayed(5, () => { Warhead.Detonate(); });
+            OmegaWarhead.StopOmega();
         }
 
         public static void OnRoundFinished()
@@ -57,7 +58,14 @@ namespace UtilPlugin
         public static IEnumerator<float> SystemWarheadwaiter(float time)
         {
             yield return Timing.WaitForSeconds(time);
-            Detonate();
+            if (UtilPlugin.Instance.Config.SystemWarheadEnabled == SystemWarheadMode.Alpha)
+            {
+                Detonate();
+            }
+            else
+            {
+                OmegaWarhead.ActivateOmega();
+            }
         }
         public static void Detonate(bool sendbroadcast = true)
         {

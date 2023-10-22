@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿//Copyright (C) Silver Wolf 2023,All Rights Reserved.
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using System;
@@ -67,7 +68,7 @@ namespace UtilPlugin
             if (votingEvent.OnVotingEnded() || Accepted)
             {
                 votingEvent.Action();
-                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=green>「投票通过」</color>{votingEvent.AcceptBroadcast}</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=green>「投票通过」</color>{votingEvent.AcceptBroadcast}</size>", 5, Broadcast.BroadcastFlags.Normal);
             }
             else
             {
