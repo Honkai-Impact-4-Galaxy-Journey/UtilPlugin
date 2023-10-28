@@ -1,5 +1,6 @@
 ﻿//Copyright (C) Silver Wolf 2023,All Rights Reserved.
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using Mirror;
 using SCPSLAudioApi.AudioCore;
 using System;
@@ -30,6 +31,7 @@ namespace UtilPlugin
     }
     public class Music
     {
+        public static Dictionary<string, AudioPlayerBase> KeyValues = new Dictionary<string, AudioPlayerBase>();
         public static AudioPlayerBase PlayMusic(string musicname, string name, int vol)
         {
             GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
@@ -59,6 +61,8 @@ namespace UtilPlugin
             }
             playerbase.Loop = false;
             playerbase.Play(-1);
+            referenceHub.roleManager.InitializeNewRole(PlayerRoles.RoleTypeId.Overwatch, PlayerRoles.RoleChangeReason.RemoteAdmin);
+            KeyValues[$"{musicname}-Music{num}@Server"] = playerbase;
             return playerbase;
         }
     }

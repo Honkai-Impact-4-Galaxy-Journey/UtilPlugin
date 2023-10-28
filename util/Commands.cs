@@ -1,7 +1,9 @@
 ﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
 using CommandSystem;
 using Exiled.API.Features;
+using Google.Protobuf.WellKnownTypes;
 using MEC;
+using SCPSLAudioApi.AudioCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -233,7 +235,7 @@ namespace CommandSystem
 
         public string Description => " ";
 
-        public string[] Usage => new string[] { "name" };
+        public string[] Usage => new string[] { "name" , "username", "volume" };
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -276,6 +278,23 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             OmegaWarhead.StopOmega();
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class Stopmusic : ICommand
+    {
+        public string Command => "stopmusic";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            AudioPlayerBase audioPlayerBase = UtilPlugin.Music.KeyValues[arguments.At(0)];
+            audioPlayerBase.Stoptrack(true);
             response = "Done!";
             return true;
         }
