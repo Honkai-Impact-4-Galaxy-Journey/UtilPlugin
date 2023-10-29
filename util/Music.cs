@@ -43,8 +43,7 @@ namespace UtilPlugin
             try
             {
                 referenceHub.nicknameSync.DisplayName = name;
-                referenceHub.characterClassManager.UserIdHook("", "ID_Dedicated");
-                referenceHub.characterClassManager.UserId = $"{musicname}-Music{num}@Server";
+                referenceHub.authManager.UserId = $"{musicname}-Music{num}@Server";
             }
             catch
             {

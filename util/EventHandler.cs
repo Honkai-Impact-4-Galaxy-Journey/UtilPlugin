@@ -15,6 +15,8 @@ using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Scp914;
 using Exiled.Events.EventArgs.Player;
+using PlayerRoles.Ragdolls;
+using Exiled.Events.EventArgs.Scp330;
 
 namespace UtilPlugin
 {
@@ -56,9 +58,17 @@ namespace UtilPlugin
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
             }
+            Exiled.Events.Handlers.Scp330.EatenScp330 += OnEatingCandy;
         }
         public static Player player;
         public static bool BypassMaxHealth;
+        public static void OnEatingCandy(EatenScp330EventArgs ev)
+        {
+            if (ev.Candy.Kind == InventorySystem.Items.Usables.Scp330.CandyKindID.Blue)
+            {
+                ev.Player.AddItem(ItemType.Adrenaline);
+            }
+        }
         public static void SetBadge(this Player player)
         {
             Badge badge = Database.GetBadge(player.UserId);
