@@ -29,9 +29,14 @@ namespace UtilPlugin
         }
 
     }
+    public class WarppedAudio
+    {
+        public AudioPlayerBase Player { get; set; }
+        public string Music { get; set; }
+    }
     public class Music
     {
-        public static Dictionary<string, AudioPlayerBase> KeyValues = new Dictionary<string, AudioPlayerBase>();
+        public static List<WarppedAudio> audios;
         public static AudioPlayerBase PlayMusic(string musicname, string name, int vol)
         {
             GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
@@ -39,16 +44,16 @@ namespace UtilPlugin
             int num = rand.Next(250, 301);
             FakeConnection connection = new FakeConnection(num);
             ReferenceHub referenceHub = gameObject.GetComponent<ReferenceHub>();
-            NetworkServer.AddPlayerForConnection(connection, gameObject);
             try
             {
                 referenceHub.nicknameSync.DisplayName = name;
-                referenceHub.authManager.UserId = $"{musicname}-Music{num}@Server";
+                referenceHub.authManager.UserId = "ID_Dedicated";
             }
             catch
             {
 
             }
+            NetworkServer.AddPlayerForConnection(connection, gameObject);
             AudioPlayerBase playerbase = AudioPlayerBase.Get(referenceHub);
             string text = Paths.Plugins + $"\\{musicname}.ogg";
             playerbase.Enqueue(text, -1);
@@ -61,8 +66,16 @@ namespace UtilPlugin
             playerbase.Loop = false;
             playerbase.Play(-1);
             referenceHub.roleManager.InitializeNewRole(PlayerRoles.RoleTypeId.Overwatch, PlayerRoles.RoleChangeReason.RemoteAdmin);
-            KeyValues[$"{musicname}-Music{num}@Server"] = playerbase;
+            audios.Add(new WarppedAudio { Player = playerbase, Music = musicname });
             return playerbase;
+        }
+        public static void OnRestartingRound()
+        {
+            foreach (WarppedAudio warppedAudio in audios)
+            {
+                warppedAudio.Player.Stoptrack(true);
+            }
+            audios.Clear();
         }
     }
 }

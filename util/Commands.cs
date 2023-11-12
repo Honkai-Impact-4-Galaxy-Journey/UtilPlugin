@@ -227,6 +227,7 @@ namespace CommandSystem
     }
 
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
     public class Music : ICommand, IUsageProvider
     {
         public string Command => "startmusic";
@@ -293,8 +294,8 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            AudioPlayerBase audioPlayerBase = UtilPlugin.Music.KeyValues[arguments.At(0)];
-            audioPlayerBase.Stoptrack(true);
+            WarppedAudio audio = UtilPlugin.Music.audios.Find(au => string.Equals(au.Music, arguments.At(0), StringComparison.CurrentCultureIgnoreCase));
+            audio?.Player.Stoptrack(true);
             response = "Done!";
             return true;
         }

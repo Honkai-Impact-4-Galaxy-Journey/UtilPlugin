@@ -28,6 +28,7 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnPlayerDied;
+            Exiled.Events.Handlers.Server.RestartingRound += Music.OnRestartingRound;
             if (UtilPlugin.Instance.Config.MysqlEnabled)
             {
                 Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
