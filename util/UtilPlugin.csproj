@@ -130,7 +130,8 @@
     <Reference Include="PluginAPI, Version=13.1.2.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\EXILED.8.3.4\lib\net48\PluginAPI.dll</HintPath>
     </Reference>
-    <Reference Include="SCPSLAudioApi">
+    <Reference Include="SCPSLAudioApi, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>.\SCPSLAudioApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />

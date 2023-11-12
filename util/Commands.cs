@@ -284,6 +284,7 @@ namespace CommandSystem
         }
     }
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
     public class Stopmusic : ICommand
     {
         public string Command => "stopmusic";
@@ -294,9 +295,29 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            WarppedAudio audio = UtilPlugin.Music.audios.Find(au => string.Equals(au.Music, arguments.At(0), StringComparison.CurrentCultureIgnoreCase));
+            WarppedAudio audio = UtilPlugin.Music.audios.Find(au => string.Equals(au.Verfiy, arguments.At(0), StringComparison.CurrentCultureIgnoreCase));
             audio?.Player.Stoptrack(true);
             response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    public class Musiclist : ICommand
+    {
+        public string Command => "musiclist";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "list all dummy player";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            response = "\n";
+            foreach (WarppedAudio warppedAudio in UtilPlugin.Music.audios)
+            {
+                response += $"{warppedAudio.Username}:{warppedAudio.Music}[{warppedAudio.Verfiy}]\n";
+            }
             return true;
         }
     }

@@ -33,27 +33,29 @@ namespace UtilPlugin
     {
         public AudioPlayerBase Player { get; set; }
         public string Music { get; set; }
+        public string Username { get; set; }
+        public string Verfiy { get; set; }
     }
     public class Music
     {
-        public static List<WarppedAudio> audios;
+        public static List<WarppedAudio> audios = new List<WarppedAudio>();
         public static AudioPlayerBase PlayMusic(string musicname, string name, int vol)
         {
             GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(NetworkManager.singleton.playerPrefab);
             System.Random rand = new System.Random();
             int num = rand.Next(250, 301);
             FakeConnection connection = new FakeConnection(num);
+            NetworkServer.AddPlayerForConnection(connection, gameObject);
             ReferenceHub referenceHub = gameObject.GetComponent<ReferenceHub>();
             try
             {
                 referenceHub.nicknameSync.DisplayName = name;
-                referenceHub.authManager.UserId = "ID_Dedicated";
+                referenceHub.authManager.UserId = $"{musicname}-{num}@server";
             }
             catch
             {
 
             }
-            NetworkServer.AddPlayerForConnection(connection, gameObject);
             AudioPlayerBase playerbase = AudioPlayerBase.Get(referenceHub);
             string text = Paths.Plugins + $"\\{musicname}.ogg";
             playerbase.Enqueue(text, -1);
@@ -66,7 +68,7 @@ namespace UtilPlugin
             playerbase.Loop = false;
             playerbase.Play(-1);
             referenceHub.roleManager.InitializeNewRole(PlayerRoles.RoleTypeId.Overwatch, PlayerRoles.RoleChangeReason.RemoteAdmin);
-            audios.Add(new WarppedAudio { Player = playerbase, Music = musicname });
+            audios.Add(new WarppedAudio { Player = playerbase, Music = musicname, Username = name, Verfiy = $"{musicname}-{num}@server"});
             return playerbase;
         }
         public static void OnRestartingRound()
