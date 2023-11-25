@@ -17,6 +17,7 @@ using Exiled.Events.EventArgs.Scp914;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles.Ragdolls;
 using Exiled.Events.EventArgs.Scp330;
+using System.Diagnostics;
 
 namespace UtilPlugin
 {
@@ -29,6 +30,8 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnPlayerDied;
             Exiled.Events.Handlers.Server.RestartingRound += Music.OnRestartingRound;
+            Exiled.Events.Handlers.Server.RoundStarted += OnRoundstart;
+            //Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             if (UtilPlugin.Instance.Config.MysqlEnabled)
             {
                 Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
@@ -59,17 +62,13 @@ namespace UtilPlugin
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
             }
-            Exiled.Events.Handlers.Scp330.EatenScp330 += OnEatingCandy;
+        }
+        public static void OnRoundstart()
+        {
+            UtilPlugin.Roundtime = Stopwatch.StartNew();
         }
         public static Player player;
         public static bool BypassMaxHealth;
-        public static void OnEatingCandy(EatenScp330EventArgs ev)
-        {
-            if (ev.Candy.Kind == InventorySystem.Items.Usables.Scp330.CandyKindID.Blue)
-            {
-                ev.Player.AddItem(ItemType.Adrenaline);
-            }
-        }
         public static void SetBadge(this Player player)
         {
             Badge badge = Database.GetBadge(player.UserId);
@@ -81,9 +80,16 @@ namespace UtilPlugin
             Log.Info($"Player {player.Nickname}({player.UserId}) has a badge {badge}");
             if (!string.Equals(badge.adminrank, "player", StringComparison.CurrentCultureIgnoreCase))
             {
-                player.SetRank(badge.adminrank, Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank));
+                player.SetRank(Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank).BadgeText, Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank));
             }
-            player.RankName = badge.text;
+            if (badge.cover || string.IsNullOrEmpty(player.RankName))
+            {
+                player.RankName = badge.text;
+            }
+            else
+            {
+                player.RankName = $"{player.RankName}*{badge.text}*";
+            }
             if (string.Equals(badge.color,"rainbow",StringComparison.CurrentCultureIgnoreCase))
             {
                 RainbowTag.RegisterPlayer(player);

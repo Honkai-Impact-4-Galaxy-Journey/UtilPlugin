@@ -33,6 +33,7 @@ namespace UtilPlugin
         }
         public static void ActivateOmega()
         {
+            return;
             if (OmegaActivated)
             {
                 return;

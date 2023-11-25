@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +58,7 @@ namespace UtilPlugin
     public enum SystemWarheadMode : byte { none, Omega, Alpha }
     public class UtilPlugin : Plugin<PluginConfig>
     {
+        public static Stopwatch Roundtime;
         public override void OnEnabled()
         {
             base.OnEnabled();
