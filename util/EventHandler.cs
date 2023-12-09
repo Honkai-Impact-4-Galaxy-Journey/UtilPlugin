@@ -82,21 +82,24 @@ namespace UtilPlugin
             {
                 player.SetRank(Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank).BadgeText, Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank));
             }
-            if (badge.cover || string.IsNullOrEmpty(player.RankName))
+            if (string.Equals("none", badge.text, StringComparison.CurrentCultureIgnoreCase))
             {
-                player.RankName = badge.text;
-            }
-            else
-            {
-                player.RankName = $"{player.RankName}*{badge.text}*";
-            }
-            if (string.Equals(badge.color,"rainbow",StringComparison.CurrentCultureIgnoreCase))
-            {
-                RainbowTag.RegisterPlayer(player);
-            }
-            else
-            {
-                player.RankColor = badge.color;
+                if (badge.cover || string.IsNullOrEmpty(player.RankName))
+                {
+                    player.RankName = badge.text;
+                }
+                else
+                {
+                    player.RankName = $"{player.RankName}*{badge.text}*";
+                }
+                if (string.Equals(badge.color, "rainbow", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    RainbowTag.RegisterPlayer(player);
+                }
+                else
+                {
+                    player.RankColor = badge.color;
+                }
             }
         }
         public static void OnPlayerJoined(JoinedEventArgs ev)

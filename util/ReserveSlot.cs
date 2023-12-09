@@ -36,12 +36,16 @@ namespace UtilPlugin
         }
         public static void OnJoining(PreAuthenticatingEventArgs ev)
         {
+            Log.Debug($"Player {ev.UserId} joining, now remain {Server.MaxPlayerCount - LiteNetLib4MirrorCore.Host.ConnectedPeersCount}");
             if (Server.MaxPlayerCount - LiteNetLib4MirrorCore.Host.ConnectedPeersCount <= Remain)
             {
+                Log.Debug($"Checking reservesolt of {ev.UserId}");
                 if (Check(ev.UserId))
                 {
+                    Log.Debug($"Player {ev.UserId} has a reserveslot");
                     return;
                 }
+                Log.Debug($"Player {ev.UserId} has no reserveslot, Rejecting...");
                 ev.Reject(UtilPlugin.Instance.Config.ReserveSlotKickReason, true);
             }
         }
