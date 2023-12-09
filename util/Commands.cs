@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UtilPlugin;
+using VoiceChat;
 
 namespace CommandSystem
 {
@@ -297,6 +298,51 @@ namespace CommandSystem
         {
             WarppedAudio audio = UtilPlugin.Music.audios.Find(au => string.Equals(au.Verfiy, arguments.At(0), StringComparison.CurrentCultureIgnoreCase));
             audio?.Player.Stoptrack(true);
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class ChannelManager : ICommand
+    {
+        public string Command => "channelmanager";
+
+        public string[] Aliases => new string[] { "cm" };
+
+        public string Description => "";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get(arguments.At(0));
+            VoiceChatChannel channel;
+            switch (arguments.At(1))
+            {
+                case "Intercom":
+                case "intercom":
+                    channel = VoiceChatChannel.Intercom; break;
+                case "Scpchat":
+                case "ScpChat":
+                case "scpchat":
+                    channel = VoiceChatChannel.ScpChat; break;
+                case "Radio":
+                case "radio":
+                    channel = VoiceChatChannel.Radio; break;
+                case "EndScreen":
+                case "Endscreen":
+                case "endscreen":
+                case "RoundSummary":
+                    channel = VoiceChatChannel.RoundSummary; break;
+                default:
+                    channel = VoiceChatChannel.Proximity; break;
+            }
+            if (bool.Parse(arguments.At(2)))
+            {
+                UtilPlugin.Music.audios.Find(w => w.Verfiy == arguments.At(0)).Player.BroadcastChannel = channel;
+            }
+            else
+            {
+                player.VoiceChannel = channel;
+            }
             response = "Done!";
             return true;
         }
