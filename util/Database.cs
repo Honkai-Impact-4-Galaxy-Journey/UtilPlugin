@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
