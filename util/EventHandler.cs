@@ -18,6 +18,7 @@ using Exiled.Events.EventArgs.Player;
 using PlayerRoles.Ragdolls;
 using Exiled.Events.EventArgs.Scp330;
 using System.Diagnostics;
+using Exiled.Events.Patches.Events.Scp330;
 
 namespace UtilPlugin
 {
@@ -27,11 +28,14 @@ namespace UtilPlugin
         public static void Register(bool value)
         {
             Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
+            Exiled.Events.Handlers.Server.RestartingRound += () => { Timing.KillCoroutines(OmegaWarhead.ForceEnd); OmegaWarhead.OmegaActivated = false; };
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnPlayerDied;
             Exiled.Events.Handlers.Server.RestartingRound += Music.OnRestartingRound;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstart;
             //Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+            Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
+            Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
             if (UtilPlugin.Instance.Config.MysqlEnabled)
             {
                 Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
@@ -63,6 +67,17 @@ namespace UtilPlugin
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
             }
         }
+        public static void OnInteractingScp330(InteractingScp330EventArgs ev)
+        {
+            if (ev.Candy == InventorySystem.Items.Usables.Scp330.CandyKindID.Yellow)
+            {
+                ev.Candy = InventorySystem.Items.Usables.Scp330.CandyKindID.Pink;
+            }
+            if (ev.UsageCount <= 3)
+            {
+                ev.ShouldSever = false;
+            }
+        }
         public static void OnRoundstart()
         {
             UtilPlugin.Roundtime = Stopwatch.StartNew();
@@ -82,7 +97,7 @@ namespace UtilPlugin
             {
                 player.SetRank(Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank).BadgeText, Exiled.API.Extensions.UserGroupExtensions.GetValue(badge.adminrank));
             }
-            if (string.Equals("none", badge.text, StringComparison.CurrentCultureIgnoreCase))
+            if (!string.Equals("none", badge.text, StringComparison.CurrentCultureIgnoreCase))
             {
                 if (badge.cover || string.IsNullOrEmpty(player.RankName))
                 {

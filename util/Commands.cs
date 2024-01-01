@@ -72,7 +72,7 @@ namespace CommandSystem
             {
                 if (arguments.At(1) == "Rainbow")
                 {
-                    UtilPlugin.RainbowTag.RegisterPlayer(player);
+                    RainbowTag.RegisterPlayer(player);
                 }
                 else
                 {
@@ -344,6 +344,58 @@ namespace CommandSystem
                 player.VoiceChannel = channel;
             }
             response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class StartEndingRound : ICommand
+    {
+        public string Command => "startendround";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "force end round in 180s";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            OmegaWarhead.ForceEnd = Timing.RunCoroutine(OmegaWarhead.ForceEndRound());
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class StopEndingRound : ICommand
+    {
+        public string Command => "stopendround";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "stop end round";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Timing.KillCoroutines(OmegaWarhead.ForceEnd);
+            OmegaWarhead.playerBase.Stoptrack(true);
+            OmegaWarhead.OmegaActivated = false;
+            foreach (Room room in Room.List) room.ResetColor();
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class Tps : ICommand
+    {
+        public string Command => "tps";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "show server tps";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            response = $"{Server.Tps}";
             return true;
         }
     }

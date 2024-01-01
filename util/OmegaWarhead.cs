@@ -19,6 +19,7 @@ namespace UtilPlugin
         public static List<Player> Shelted = new List<Player>();
         public static List<CoroutineHandle> coroutines = new List<CoroutineHandle>();
         public static bool OmegaActivated = false;
+        public static CoroutineHandle ForceEnd;
         public static AudioPlayerBase playerBase;
         public static void StopOmega()
         {
@@ -31,6 +32,28 @@ namespace UtilPlugin
                 OmegaActivated = false;
             }
         }
+        public static IEnumerator<float> ForceEndRound()
+        {
+            if (OmegaActivated) { yield break; }
+            yield return Timing.WaitForSeconds(3);
+            Warhead.Stop();
+            foreach (Room room in Room.List)
+            {
+                room.Color = Color.cyan;
+            }
+            Warhead.IsLocked = true;
+            OmegaActivated = true;
+            playerBase = Music.PlayMusic("Omega", "Omega核弹警报", 70);
+            yield return Timing.WaitForSeconds(184);
+            foreach (Player player in Player.List)
+            {
+                player.Kill("在Omega核弹中蒸发(强制终局)");
+            }
+            foreach (Room room in Room.List)
+            {
+                room.Color = Color.blue;
+            }
+        } 
         public static void ActivateOmega()
         {
             return;
