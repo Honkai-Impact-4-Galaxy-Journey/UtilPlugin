@@ -2,6 +2,8 @@
 using CommandSystem;
 using Exiled.API.Features;
 using Google.Protobuf.WellKnownTypes;
+using InventorySystem;
+using InventorySystem.Disarming;
 using MEC;
 using SCPSLAudioApi.AudioCore;
 using System;
@@ -396,6 +398,42 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             response = $"{Server.Tps}";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class ReloadBadge : ICommand
+    {
+        public string Command => "reloadbadge";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (arguments.Count == 0) BadgeDatabase.Update();
+            else BadgeDatabase.Update(arguments.At(0));
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class Panbian : ICommand
+    {
+        public string Command => "touxiang";
+
+        public string[] Aliases => new string[] { "panbian" };
+
+        public string Description => "自己绑自己";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = Player.Get((sender as CommandSender).SenderId);
+            player.ReferenceHub.inventory.SetDisarmedStatus(null);
+            player.ReferenceHub.inventory.ServerDropEverything();
+            response = "Done!";
             return true;
         }
     }

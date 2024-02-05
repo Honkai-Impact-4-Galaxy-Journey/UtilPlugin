@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace UtilPlugin
 {
-    public class Database
+    public class BadgeDatabase
     {
+        public static string connectstring = UtilPlugin.Instance.Config.MysqlConnectstring;
         public static List<Badge> badges = new List<Badge>();
-        public static void Update(string connectstring)
+        public static void Update(string connectstring = null)
         {
-            using (MySqlConnection connection = new MySqlConnection(connectstring))
+            using (MySqlConnection connection = new MySqlConnection(connectstring != null ? connectstring : BadgeDatabase.connectstring))
             {
                 connection.Open();
                 badges.Clear();

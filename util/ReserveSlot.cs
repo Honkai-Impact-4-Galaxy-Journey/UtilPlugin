@@ -14,10 +14,10 @@ namespace UtilPlugin
 {
     public class ReserveSlot
     {
-        public static int Remain => UtilPlugin.Instance.Config.Slots - Player.List.Where(p => Database.badges.Find(badge => badge.userid == p.UserId)?.reverseslot == "yes").Count();
+        public static int Remain => UtilPlugin.Instance.Config.Slots - Player.List.Where(p => BadgeDatabase.badges.Find(badge => badge.userid == p.UserId)?.reverseslot == "yes").Count();
         public static bool Check(string id)
         {
-            if(Database.badges.Find(badge => badge.userid == id)?.reverseslot == "yes")
+            if(BadgeDatabase.badges.Find(badge => badge.userid == id)?.reverseslot == "yes")
             {
                 return true;
             }

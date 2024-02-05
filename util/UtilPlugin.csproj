@@ -71,12 +71,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-Publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EXILED.8.6.0\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp_publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Assembly-CSharp_publicized">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
@@ -216,8 +211,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Broadcastor.cs" />
     <Compile Include="Commands.cs" />
-    <Compile Include="Database.cs" />
+    <Compile Include="BadgeDatabase.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="Music.cs" />
     <Compile Include="Gamemode.cs" />

@@ -27,7 +27,7 @@ namespace UtilPlugin
         [Description("每次自动清理的时间（以秒为单位）")]
         public float Cleanuptime { get; set; } = 500;
         [Description("系统核弹模式")]
-        public SystemWarheadMode SystemWarheadEnabled { get; set; } = SystemWarheadMode.Omega;
+        public SystemWarheadMode SystemWarheadEnabled { get; set; } = SystemWarheadMode.Alpha;
         [Description("系统核弹触发时间")]
         public float SystemWarheadTime { get; set; } = 1200;
         [Description("系统核弹触发时公告")]
@@ -54,6 +54,10 @@ namespace UtilPlugin
         public bool MysqlEnabled { get; set; } = false;
         [Description("MySQL 连接字符串")]
         public string MysqlConnectstring { get; set; } = "Server=127.0.0.1;Database=scp5;User=root;Password=awaawa;Charset=utf8";
+        [Description("刷新粉糖")]
+        public bool PinkCandy { get; set; } = true;
+        [Description("拿糖数量")]
+        public int CandyCount { get; set; } = 6;
     }
     public enum SystemWarheadMode : byte { none, Omega, Alpha }
     public class UtilPlugin : Plugin<PluginConfig>
@@ -69,7 +73,7 @@ namespace UtilPlugin
             Voting.OnEnabled(true);
             if (Config.MysqlEnabled)
             {
-                Database.Update(Config.MysqlConnectstring);
+                BadgeDatabase.Update();
             }
         }
         public override string Author => "Silver Wolf";

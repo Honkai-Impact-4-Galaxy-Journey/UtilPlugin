@@ -35,7 +35,7 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstart;
             //Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
-            Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
+            //Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
             if (UtilPlugin.Instance.Config.MysqlEnabled)
             {
                 Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
@@ -69,11 +69,11 @@ namespace UtilPlugin
         }
         public static void OnInteractingScp330(InteractingScp330EventArgs ev)
         {
-            if (ev.Candy == InventorySystem.Items.Usables.Scp330.CandyKindID.Yellow)
+            if (ev.Candy == InventorySystem.Items.Usables.Scp330.CandyKindID.Yellow && UtilPlugin.Instance.Config.PinkCandy && UnityEngine.Random.Range(1, 100) <= 20)
             {
                 ev.Candy = InventorySystem.Items.Usables.Scp330.CandyKindID.Pink;
             }
-            if (ev.UsageCount <= 3)
+            if (ev.UsageCount <= UtilPlugin.Instance.Config.CandyCount - 1)
             {
                 ev.ShouldSever = false;
             }
@@ -86,7 +86,7 @@ namespace UtilPlugin
         public static bool BypassMaxHealth;
         public static void SetBadge(this Player player)
         {
-            Badge badge = Database.GetBadge(player.UserId);
+            Badge badge = BadgeDatabase.GetBadge(player.UserId);
             if (badge == null || badge.text == "none")
             {
                 Log.Info($"Player {player.Nickname}({player.UserId}) has no badge");
@@ -123,7 +123,7 @@ namespace UtilPlugin
         }
         public static void OnRoundRestart()
         {
-            Database.Update(UtilPlugin.Instance.Config.MysqlConnectstring);
+            BadgeDatabase.Update();
         }
         public static void OnPlayerDied(DiedEventArgs ev)
         {
