@@ -19,11 +19,13 @@ using PlayerRoles.Ragdolls;
 using Exiled.Events.EventArgs.Scp330;
 using System.Diagnostics;
 using Exiled.Events.Patches.Events.Scp330;
+using InventorySystem.Items.Usables.Scp330;
 
 namespace UtilPlugin
 {
     public static class EventHandler
     {
+        public static List<CoroutineHandle> SB = new List<CoroutineHandle>();
         public static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
         {
@@ -33,8 +35,10 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Player.Died += OnPlayerDied;
             Exiled.Events.Handlers.Server.RestartingRound += Music.OnRestartingRound;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstart;
-            //Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+            Exiled.Events.Handlers.Server.RoundEnded += (RoundEndedEventArgs ev) => { foreach (var cor in SB) Timing.KillCoroutines(cor); } ;
+            //Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
+            Exiled.Events.Handlers.Scp330.EatenScp330 += OnEatenScp330;
             //Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
             if (UtilPlugin.Instance.Config.MysqlEnabled)
             {
@@ -67,11 +71,32 @@ namespace UtilPlugin
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
             }
         }
+        public static void OnEatenScp330(EatenScp330EventArgs ev)
+        {
+            switch (ev.Candy.Kind)
+            {
+                case CandyKindID.Purple:
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.DamageReduction, 100, 15, true);
+                    break;
+                case CandyKindID.Blue:
+                    ev.Player.AddAhp(20, decay:0, efficacy:1);
+                    break;
+                case CandyKindID.Yellow:
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.MovementBoost, 30, 10, true);
+                    break;
+                case CandyKindID.Red:
+                    ev.Player.Heal(20);
+                    break;
+                case CandyKindID.Green:
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Vitality, 60, true);
+                    break;
+            }
+        }
         public static void OnInteractingScp330(InteractingScp330EventArgs ev)
         {
-            if (ev.Candy == InventorySystem.Items.Usables.Scp330.CandyKindID.Yellow && UtilPlugin.Instance.Config.PinkCandy && UnityEngine.Random.Range(1, 100) <= 20)
+            if (ev.Candy == CandyKindID.Yellow && UtilPlugin.Instance.Config.PinkCandy && UnityEngine.Random.Range(1, 100) <= 80)
             {
-                ev.Candy = InventorySystem.Items.Usables.Scp330.CandyKindID.Pink;
+                ev.Candy = CandyKindID.Pink;
             }
             if (ev.UsageCount <= UtilPlugin.Instance.Config.CandyCount - 1)
             {
@@ -204,6 +229,18 @@ namespace UtilPlugin
                 }
                 PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
             }
+        }
+        public static IEnumerator<float> WDNMD(Player player)
+        {
+            long timenow = UtilPlugin.Roundtime.ElapsedMilliseconds / 1000;
+            while (true)
+            {
+                player.EnableEffect(Exiled.API.Enums.EffectType.SeveredHands);
+                yield return Timing.WaitForSeconds(0.1f);
+                player.DisableEffect(Exiled.API.Enums.EffectType.SeveredHands);
+                if (UtilPlugin.Roundtime.ElapsedMilliseconds / 1000 - timenow >= 30) break;
+            }
+            yield break;
         }
     }
 }
