@@ -43,11 +43,11 @@ namespace UtilPlugin
             }
             Warhead.IsLocked = true;
             OmegaActivated = true;
-            playerBase = Music.PlayMusic("Omega", "Omega核弹警报", 70);
+            playerBase = Music.PlayMusic("Omega", "Omega核弹警报", 40);
             yield return Timing.WaitForSeconds(184);
             foreach (Player player in Player.List)
             {
-                player.Kill("在Omega核弹中蒸发(强制终局)");
+                if (player.IsAlive) player.Kill("在Omega核弹中蒸发(强制终局)");
             }
             foreach (Room room in Room.List)
             {
