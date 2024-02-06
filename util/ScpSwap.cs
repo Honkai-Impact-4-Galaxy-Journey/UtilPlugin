@@ -19,7 +19,7 @@ namespace UtilPlugin
                 swapids[target] = new List<string> { origin };
                 goto Send;
             }
-            if (swapids[target].Contains(origin) || swapids[origin].Contains(target))
+            if (swapids[origin].Contains(target))
             {
                 RoleTypeId roleTypeId = Player.Get(origin).Role.Type;
                 Player.Get(origin).Role.Set(Player.Get(target).Role.Type);
@@ -81,6 +81,27 @@ namespace UtilPlugin
             else response = "不存在此scp";
             return flag;
 
+        }
+    }
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
+    public class ForceSwapScp : ICommand, IUsageProvider
+    {
+        public string[] Usage => new string[] { "originname", "targetname"};
+
+        public string Command => "forceswapscp";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            string origin = arguments.At(0), target = arguments.At(1);
+            RoleTypeId roleTypeId = Player.Get(origin).Role.Type;
+            Player.Get(origin).Role.Set(Player.Get(target).Role.Type);
+            Player.Get(target).Role.Set(roleTypeId);
+            response = "Done!";
+            return true;
         }
     }
 }
