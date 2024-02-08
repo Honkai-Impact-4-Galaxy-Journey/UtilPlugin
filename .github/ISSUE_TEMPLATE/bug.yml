@@ -1,7 +1,8 @@
 #来源于PCL2仓库（https://github.com/Hex-Dragon/PCL2）
 name: "Bug 反馈"
 description: "遇见了Bug"
-labels: [bug, enhancement]
+labels: [bug]
+assignees: [dargoncat]
 body:
 - type: checkboxes
   id: "yml-1"
