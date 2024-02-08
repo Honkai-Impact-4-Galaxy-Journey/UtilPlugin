@@ -424,41 +424,4 @@ namespace CommandSystem
             return true;
         }
     }
-    [CommandHandler(typeof(ClientCommandHandler))]
-    public class Panbian : ICommand
-    {
-        public string Command => "touxiang";
-
-        public string[] Aliases => new string[] { "panbian" };
-
-        public string Description => "自己绑自己(30%)";
-
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
-        {
-            Player player = Player.Get((sender as CommandSender).SenderId);
-            if (UnityEngine.Random.Range(1,100) >= 71 || arguments.Count != 0)
-            {
-                player.ReferenceHub.inventory.SetDisarmedStatus(null);
-                if (!(arguments.Count != 0 && bool.Parse(arguments.At(0))))
-                {
-                    Vector3 pos = player.Position;
-                    player.Teleport(new Vector3(40, 1014, -32.6f));
-                    player.ReferenceHub.inventory.ServerDropEverything();
-                    player.Teleport(pos);
-                }
-                else
-                {
-                    player.ReferenceHub.inventory.ServerDropEverything();
-                }
-                DisarmedPlayers.Entries.Add(new DisarmedPlayers.DisarmedEntry(player.ReferenceHub.networkIdentity.netId, 0U));
-                new DisarmedPlayersListMessage(DisarmedPlayers.Entries).SendToAuthenticated(0);
-            }
-            else
-            {
-                Timing.RunCoroutine(UtilPlugin.EventHandler.WDNMD(player));
-            }
-            response = "Done!";
-            return true;
-        }
-    }
 }
