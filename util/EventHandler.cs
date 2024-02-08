@@ -25,7 +25,6 @@ namespace UtilPlugin
 {
     public static class EventHandler
     {
-        public static List<CoroutineHandle> SB = new List<CoroutineHandle>();
         public static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
         {
@@ -229,18 +228,6 @@ namespace UtilPlugin
                 }
                 PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
             }
-        }
-        public static IEnumerator<float> WDNMD(Player player)
-        {
-            long timenow = UtilPlugin.Roundtime.ElapsedMilliseconds / 1000;
-            while (true)
-            {
-                player.EnableEffect(Exiled.API.Enums.EffectType.SeveredHands);
-                yield return Timing.WaitForSeconds(0.1f);
-                player.DisableEffect(Exiled.API.Enums.EffectType.SeveredHands);
-                if (UtilPlugin.Roundtime.ElapsedMilliseconds / 1000 - timenow >= 30) break;
-            }
-            yield break;
         }
     }
 }
