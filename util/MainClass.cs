@@ -38,6 +38,8 @@ namespace UtilPlugin
         public bool ReserveSlotEnabled { get; set; } = false;
         [Description("管理员预留位数量")]
         public int Slots { get; set; } = 5;
+        [Description("系统核弹投票可发起时间(以秒为单位)")]
+        public int SystemWarheadVoteTime { get; set; } = 720;
         [Description("预留位踢出理由")]
         public string ReserveSlotKickReason { get; set; } = "服务器已满人";
         [Description("允许投票提前开启系统核(Disabled)")]

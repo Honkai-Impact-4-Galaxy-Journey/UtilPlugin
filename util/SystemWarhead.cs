@@ -40,7 +40,15 @@ namespace UtilPlugin
             }
             if (true)
             {
-                Voting.Register(new VotingEvent { Action = () => Detonate(false), Name = "sw", Description = "启动系统核[60%]", VotingDes = "系统核弹", Votingpercent = 0.55, AcceptBroadcast = "系统核弹已经启动", CheckBeforeVoting = () => { return UtilPlugin.Roundtime.ElapsedMilliseconds / 1000 > 720; }, OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.6; } });
+                Voting.Register(new VotingEvent { Action = () => Detonate(false),
+                    Name = "sw",
+                    Description = "启动系统核[60%]",
+                    VotingDes = "系统核弹",
+                    Votingpercent = 0.55,
+                    AcceptBroadcast = "系统核弹已经启动",
+                    CheckBeforeVoting = () => { return UtilPlugin.Roundtime.ElapsedMilliseconds / 1000 > UtilPlugin.Instance.Config.SystemWarheadVoteTime; },
+                    OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.6; } 
+                });
                 //Voting.Register(new VotingEvent { Action = () => OmegaWarhead.ActivateOmega(), Name = "omega", Description = "启动Omega核弹", VotingDes = "启动Omega核弹", AcceptBroadcast = "Omega核弹已启动", CheckBeforeVoting = () => true, OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.7; } });
             }
         }

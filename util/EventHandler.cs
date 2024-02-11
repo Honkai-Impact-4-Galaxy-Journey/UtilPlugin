@@ -34,7 +34,6 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Player.Died += OnPlayerDied;
             Exiled.Events.Handlers.Server.RestartingRound += Music.OnRestartingRound;
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstart;
-            //Exiled.Events.Handlers.Player.Handcuffing += OnHandcuffing;
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
             Exiled.Events.Handlers.Scp330.EatenScp330 += OnEatenScp330;
             //Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
