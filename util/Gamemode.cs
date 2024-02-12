@@ -17,7 +17,7 @@ namespace UtilPlugin
         {
             if (UtilPlugin.Instance.Config.ArrowVoteFunny)
             {
-                Voting.Register(new VotingEvent { Action = () => NextMode = Gamemodes.Other, Votingpercent = 0.5, Name = "funnygame", AcceptBroadcast = "下回合游戏模式为<color=yellow>娱乐</color>", Description = "更改下回合游戏模式为娱乐[不能在无管理员时发起]", VotingDes = "更改下回合游戏模式为娱乐", CheckBeforeVoting = CheckCanChangeMode, OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.85; } });
+                //Voting.Register(new VotingEvent { Action = () => NextMode = Gamemodes.Other, Votingpercent = 0.5, Name = "funnygame", AcceptBroadcast = "下回合游戏模式为<color=yellow>娱乐</color>", Description = "更改下回合游戏模式为娱乐[不能在无管理员时发起]", VotingDes = "更改下回合游戏模式为娱乐", CheckBeforeVoting = CheckCanChangeMode, OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / (Voting.AcceptPlayer.Count + Voting.AgainstPlayer.Count) >= 0.85; } });
                 Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             }
         }
