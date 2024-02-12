@@ -424,4 +424,69 @@ namespace CommandSystem
             return true;
         }
     }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class Callkick : ICommand
+    {
+        public string Command => "callkick";
+
+        public string[] Aliases => Array.Empty<string>();
+
+        public string Description => "投票踢人，用法：.callkick [id]";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (arguments.Count == 0)
+            {
+                response = "";
+                foreach (Player player in Player.List)
+                {
+                    response += $"{player.DisplayNickname}({player.Id})\n";
+                }
+                return false;
+            }
+            else
+            {
+                Player origin = Player.Get((sender as CommandSender).SenderId);
+                Player target = Player.Get(int.Parse(arguments.At(0)));
+                if (target == null)
+                {
+                    response = "不存在该玩家";
+                    return false;
+                }
+                if (!Check())
+                {
+                    response = "当前服务器内有管理员！请联系管理员";
+                    return false;
+                }
+                if (!Voting.Canvote)
+                {
+                    response = "当前不可发起投票";
+                    return false;
+                }
+                Voting.Canvote = false;
+                Voting.voting = true;
+                Voting.AcceptPlayer.Add(origin.UserId);
+                Voting.votingcoroutine = Timing.RunCoroutine(Voting.SendBroadcast(new VotingEvent
+                {
+                    VotingDes = $"踢出{target.DisplayNickname}",
+                    AcceptBroadcast = $"正在踢出{target.DisplayNickname}",
+                    Action = () => { target.Ban(3, "你已被投票踢出"); },
+                    CheckBeforeVoting = () => { return (double)Voting.AcceptPlayer.Count / Server.PlayerCount >= 0.7; }
+                }, origin));
+                response = "Done!";
+                return true;
+            }
+        }
+        public static bool Check()
+        {
+            foreach (Player player in Player.List)
+            {
+                if (player.Group != null && (player.Group.Permissions & (ulong)(PlayerPermissions.KickingAndShortTermBanning | PlayerPermissions.BanningUpToDay | PlayerPermissions.LongTermBanning)) != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }
