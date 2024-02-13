@@ -163,7 +163,7 @@ namespace UtilPlugin
         }
         public static void OnSpawned(SpawnedEventArgs ev)
         {
-            if (UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.Player.Role))
+            if (UtilPlugin.Instance.Config.HealthValues != null && UtilPlugin.Instance.Config.HealthValues.ContainsKey(ev.Player.Role))
             {
                 ev.Player.MaxHealth = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
                 ev.Player.Health = UtilPlugin.Instance.Config.HealthValues[ev.Player.Role];
