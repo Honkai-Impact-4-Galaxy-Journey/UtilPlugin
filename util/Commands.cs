@@ -470,7 +470,7 @@ namespace CommandSystem
                 {
                     VotingDes = $"踢出{target.DisplayNickname}",
                     AcceptBroadcast = $"正在踢出{target.DisplayNickname}",
-                    Action = () => { target.Ban(3, "你已被投票踢出"); },
+                    Action = () => { target.Ban(120, "你已被投票踢出"); },
                     OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / Server.PlayerCount >= 0.7; }
                 }, origin));
                 response = "Done!";
