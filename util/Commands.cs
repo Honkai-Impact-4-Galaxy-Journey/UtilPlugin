@@ -453,7 +453,7 @@ namespace CommandSystem
                     response = "不存在该玩家";
                     return false;
                 }
-                if (!Check())
+                if (Check())
                 {
                     response = "当前服务器内有管理员！请联系管理员";
                     return false;
@@ -471,7 +471,7 @@ namespace CommandSystem
                     VotingDes = $"踢出{target.DisplayNickname}",
                     AcceptBroadcast = $"正在踢出{target.DisplayNickname}",
                     Action = () => { target.Ban(3, "你已被投票踢出"); },
-                    CheckBeforeVoting = () => { return (double)Voting.AcceptPlayer.Count / Server.PlayerCount >= 0.7; }
+                    OnVotingEnded = () => { return (double)Voting.AcceptPlayer.Count / Server.PlayerCount >= 0.7; }
                 }, origin));
                 response = "Done!";
                 return true;
