@@ -135,7 +135,7 @@ namespace UtilPlugin
             while (time != 0)
             {
                 time--;
-                PluginAPI.Core.Server.SendBroadcast($"<size=28>{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(int)((double)AcceptPlayer.Count / (AcceptPlayer.Count + AgainstPlayer.Count) * 100)}%)[{time}]</size>", 1, Broadcast.BroadcastFlags.Normal, true);
+                PluginAPI.Core.Server.SendBroadcast($"<size=28>{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(int)((double)AcceptPlayer.Count / (Server.PlayerCount) * 100)}%)[{time}]</size>", 1, Broadcast.BroadcastFlags.Normal, true);
                 yield return Timing.WaitForSeconds(1.1f);
             }
             OnVotingEnded(votingEvent);
