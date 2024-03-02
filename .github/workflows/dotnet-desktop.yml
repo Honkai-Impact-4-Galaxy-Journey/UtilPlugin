@@ -78,3 +78,5 @@ jobs:
     - run: dotnet build
 
     - uses: actions/upload-artifact@v4
+      with:
+          path: D:\a\UtilPlugin\UtilPlugin\util\bin\Debug
