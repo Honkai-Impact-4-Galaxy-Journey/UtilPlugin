@@ -40,3 +40,4 @@ Last, Place the UtilPlugin.dll in the %appdata%\Exiled\Plugins folder
 
 最后将nwapi-dependencies.zip中的文件放入SCP Secret Laboratory\PluginAPI\plugins\<端口号>\dependencies文件夹中
 
+~作者要拼中考可能写完忘发release，可以自行到actions里面提取~
