@@ -79,4 +79,4 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-          path: D:\a\UtilPlugin\UtilPlugin\util\bin\Debug
+          path: D:\a\UtilPlugin\UtilPlugin\util\bin\Debug\UtilPlugin.dll
