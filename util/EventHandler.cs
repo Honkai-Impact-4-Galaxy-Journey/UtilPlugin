@@ -20,16 +20,23 @@ using Exiled.Events.EventArgs.Scp330;
 using System.Diagnostics;
 using Exiled.Events.Patches.Events.Scp330;
 using InventorySystem.Items.Usables.Scp330;
+using Exiled.API.Enums;
+using Exiled.Events.EventArgs.Map;
+using Exiled.API.Features.Doors;
+using Exiled.API.Interfaces;
+using LightContainmentZoneDecontamination;
 
 namespace UtilPlugin
 {
     public static class EventHandler
     {
+        public static List<CoroutineHandle> coroutines = new List<CoroutineHandle>();
         public static CoroutineHandle _cleanupcoroutine;
         public static void Register(bool value)
         {
             Exiled.Events.Handlers.Server.RestartingRound += RainbowTag.OnRoundRestart;
             Exiled.Events.Handlers.Server.RestartingRound += () => { Timing.KillCoroutines(OmegaWarhead.ForceEnd); OmegaWarhead.OmegaActivated = false; };
+            Exiled.Events.Handlers.Server.RestartingRound += () => { foreach (CoroutineHandle coroutine in coroutines) Timing.KillCoroutines(coroutine); };
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
             Exiled.Events.Handlers.Player.Died += OnPlayerDied;
             Exiled.Events.Handlers.Server.RestartingRound += Music.OnRestartingRound;
@@ -37,6 +44,7 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
             Exiled.Events.Handlers.Scp330.EatenScp330 += OnEatenScp330;
             //Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
+            Exiled.Events.Handlers.Map.Decontaminating += OnDecont;
             if (UtilPlugin.Instance.Config.MysqlEnabled)
             {
                 Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
@@ -68,24 +76,51 @@ namespace UtilPlugin
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
             }
         }
+        public static void OnDecont(DecontaminatingEventArgs ev)
+        {
+            coroutines.Add(Timing.RunCoroutine(Deconted()));
+        }
+        public static IEnumerator<float> Deconted()
+        {
+            yield return Timing.WaitForSeconds(5);
+            foreach (Door door in Door.List)
+            {
+                if (door.Zone == ZoneType.LightContainment)
+                {
+                    door.IsOpen = true;
+                    if (door.IsDamageable) (door as IDamageableDoor).Break();
+                }
+            }
+            yield return Timing.WaitForSeconds(180);
+            foreach (Lift lift in Lift.List)
+            {
+                if (lift.IsLocked && !Warhead.IsDetonated)
+                {
+                    lift.ChangeLock(Interactables.Interobjects.DoorUtils.DoorLockReason.None);
+                }
+            }
+        }
         public static void OnEatenScp330(EatenScp330EventArgs ev)
         {
             switch (ev.Candy.Kind)
             {
                 case CandyKindID.Purple:
-                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.DamageReduction, 100, 15, true);
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.DamageReduction, 160, 15, true);
                     break;
                 case CandyKindID.Blue:
                     ev.Player.AddAhp(20, decay:0, efficacy:1);
                     break;
                 case CandyKindID.Yellow:
-                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.MovementBoost, 30, 10, true);
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.MovementBoost, 40, 10, true);
                     break;
                 case CandyKindID.Red:
                     ev.Player.Heal(20);
                     break;
                 case CandyKindID.Green:
                     ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Vitality, 60, true);
+                    break;
+                case CandyKindID.Rainbow:
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.MovementBoost, 20, 20);
                     break;
             }
         }
@@ -103,6 +138,13 @@ namespace UtilPlugin
         public static void OnRoundstart()
         {
             UtilPlugin.Roundtime = Stopwatch.StartNew();
+            foreach (Window window in Window.List)
+            {
+                if(window.Room.RoomName == MapGeneration.RoomName.Lcz330)
+                {
+                    window.Health = 1;
+                }
+            }
         }
         public static Player player;
         public static bool BypassMaxHealth;
