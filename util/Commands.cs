@@ -418,7 +418,7 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (arguments.Count == 0) BadgeDatabase.Update();
+            if (arguments.Count == 0) BadgeDatabase.Update(); // 用于临时连接至另一台MySQL服务器，调试版
             else BadgeDatabase.Update(arguments.At(0));
             response = "Done!";
             return true;

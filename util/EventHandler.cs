@@ -111,13 +111,13 @@ namespace UtilPlugin
                     ev.Player.AddAhp(20, decay:0, efficacy:1);
                     break;
                 case CandyKindID.Yellow:
-                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.MovementBoost, 40, 10, true);
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.MovementBoost, 50, 15, true);
                     break;
                 case CandyKindID.Red:
                     ev.Player.Heal(20);
                     break;
                 case CandyKindID.Green:
-                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Vitality, 60, true);
+                    ev.Player.EnableEffect(Exiled.API.Enums.EffectType.Vitality, 360, true);
                     break;
                 case CandyKindID.Rainbow:
                     ev.Player.EnableEffect(Exiled.API.Enums.EffectType.MovementBoost, 20, 20);
@@ -251,22 +251,27 @@ namespace UtilPlugin
         {
             while(Flag)
             {
-                yield return Timing.WaitForSeconds(delay-30);
+                yield return Timing.WaitForSeconds(delay - 30);
                 PluginAPI.Core.Server.SendBroadcast("服务器将在30秒后清理掉落物和尸体", 10);
                 yield return Timing.WaitForSeconds(30);
-                foreach(var a in UnityEngine.Object.FindObjectsOfType<ItemPickupBase>())
-                {
-                    Pickup pickup = Pickup.Get(a);
-                    if (!(IsSCPitem(pickup.Type) || pickup.Type==ItemType.GrenadeFlash || pickup.Type == ItemType.Jailbird || pickup.Type==ItemType.GrenadeHE || pickup.Type==ItemType.MicroHID || pickup.Type==ItemType.KeycardO5 || pickup.Type==ItemType.KeycardFacilityManager || pickup.Type==ItemType.ParticleDisruptor))
-                    {
-                        pickup.Destroy();
-                    }
-                }
-                foreach(var a in UnityEngine.Object.FindObjectsOfType<BasicRagdoll>())
-                {
-                    Ragdoll.Get(a).Destroy();
-                }
+                CleanServer(true);
                 PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
+            }
+        }
+
+        public static void CleanServer(bool flag)
+        {
+            foreach (var a in UnityEngine.Object.FindObjectsOfType<ItemPickupBase>())
+            {
+                Pickup pickup = Pickup.Get(a);
+                if (!(IsSCPitem(pickup.Type) || pickup.Type == ItemType.GrenadeFlash || pickup.Type == ItemType.Jailbird || pickup.Type == ItemType.GrenadeHE || pickup.Type == ItemType.MicroHID || pickup.Type == ItemType.KeycardO5 || pickup.Type == ItemType.KeycardFacilityManager || pickup.Type == ItemType.ParticleDisruptor))
+                {
+                    pickup.Destroy();
+                }
+            }
+            foreach (var a in UnityEngine.Object.FindObjectsOfType<BasicRagdoll>())
+            {
+                Ragdoll.Get(a).Destroy();
             }
         }
     }
