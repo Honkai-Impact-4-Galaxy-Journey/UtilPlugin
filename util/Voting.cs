@@ -245,7 +245,7 @@ namespace CommandSystem
         }
     }
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    [CommandHandler(typeof(GameConsoleCommandHandler))]
+    [CommandHandler(typeof(ClientCommandHandler))]
     public class AcceptVote : ICommand
     {
         public string Command => "acceptvote";
@@ -256,7 +256,7 @@ namespace CommandSystem
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if(arguments.Count == 0)
+            if (arguments.Count == 0)
             {
                 response = "require 1 argument!(true or false)";
             }
