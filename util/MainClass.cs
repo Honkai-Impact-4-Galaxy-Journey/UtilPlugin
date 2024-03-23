@@ -55,7 +55,7 @@ namespace UtilPlugin
         [Description("是否启用MySQL支持")]
         public bool MysqlEnabled { get; set; } = false;
         [Description("MySQL 连接字符串")]
-        public string MysqlConnectstring { get; set; } = "Server=127.0.0.1;Database=scp5;User=root;Password=awaawa;Charset=utf8";
+        public string MysqlConnectstring { get; set; } = "Server=127.0.0.1;Database=scp;User=root;Password=awaawa;Charset=utf8";
         [Description("刷新粉糖")]
         public bool PinkCandy { get; set; } = true;
         [Description("拿糖数量")]
