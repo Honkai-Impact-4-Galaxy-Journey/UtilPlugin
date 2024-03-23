@@ -42,6 +42,8 @@ Last, Place the UtilPlugin.dll in the %appdata%\Exiled\Plugins folder
 
 ~作者要拼中考可能写完忘发release，可以自行到actions里面提取~
 
+使用本插件代表你已经同意[EULA](https://github.com/dargoncat/UtilPlugin/blob/main/EULA.md)，并接受其约束
+
 本插件在GPLv3开源许可协议下开源，并且带有附加条款
 
 ## 附加条款
