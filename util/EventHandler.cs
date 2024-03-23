@@ -25,6 +25,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
 using LightContainmentZoneDecontamination;
+using UnityEngine;
 
 namespace UtilPlugin
 {
@@ -43,6 +44,7 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstart;
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
             Exiled.Events.Handlers.Scp330.EatenScp330 += OnEatenScp330;
+            Exiled.Events.Handlers.Scp914.UpgradingPickup += OnUpgrading;
             //Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
             Exiled.Events.Handlers.Map.Decontaminating += OnDecont;
             if (UtilPlugin.Instance.Config.MysqlEnabled)
@@ -74,6 +76,38 @@ namespace UtilPlugin
             {
                 Exiled.Events.Handlers.Server.RoundStarted -= Cleanup;
                 Exiled.Events.Handlers.Server.RestartingRound -= Stopcleanup;
+            }
+        }
+        public static bool IsKeycard(ItemType itemType) => itemType == ItemType.KeycardJanitor ||
+            itemType == ItemType.KeycardScientist ||
+            itemType == ItemType.KeycardResearchCoordinator ||
+            itemType == ItemType.KeycardZoneManager ||
+            itemType == ItemType.KeycardGuard ||
+            itemType == ItemType.KeycardMTFPrivate ||
+            itemType == ItemType.KeycardContainmentEngineer ||
+            itemType == ItemType.KeycardMTFOperative ||
+            itemType == ItemType.KeycardMTFCaptain ||
+            itemType == ItemType.KeycardFacilityManager ||
+            itemType == ItemType.KeycardChaosInsurgency ||
+            itemType == ItemType.KeycardO5;
+        public static void OnUpgrading(UpgradingPickupEventArgs ev)
+        {
+            if (ev.KnobSetting == Scp914.Scp914KnobSetting.VeryFine && ev.Pickup.Type == ItemType.Coin)
+            {
+                System.Random random = new System.Random();
+                ItemType itemType = (ItemType)random.Next(1, 53);
+                Quaternion rolation = ev.Pickup.Rotation;
+                Player player = ev.Pickup.PreviousOwner;
+                ev.Pickup.Destroy();
+                Pickup.CreateAndSpawn(itemType, ev.OutputPosition, rolation, player);
+            }
+            if (ev.KnobSetting == Scp914.Scp914KnobSetting.Rough && IsKeycard(ev.Pickup.Type))
+            {
+                Quaternion rolation = ev.Pickup.Rotation;
+                Player player = ev.Pickup.PreviousOwner;
+                ev.Pickup.Destroy();
+                for (int i = 0; i < 12; i++) Pickup.CreateAndSpawn(ItemType.Coin, ev.OutputPosition, rolation, player);
+                ev.IsAllowed = false;
             }
         }
         public static void OnDecont(DecontaminatingEventArgs ev)
