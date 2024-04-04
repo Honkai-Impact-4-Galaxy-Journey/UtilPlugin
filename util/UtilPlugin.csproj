@@ -217,6 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Broadcast.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="BadgeDatabase.cs" />
     <Compile Include="EventHandler.cs" />
