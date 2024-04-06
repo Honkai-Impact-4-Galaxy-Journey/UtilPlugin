@@ -62,7 +62,7 @@ namespace UtilPlugin
                     {
                         result += $"还有{-remain}条消息没有显示";
                     }
-                    player.Broadcast(result, 2);
+                    player.Broadcast(2, result);
                 }
                 for (int i = 0; i < globals.Count; i++)
                 {
