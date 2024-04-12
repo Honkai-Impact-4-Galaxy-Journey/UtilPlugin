@@ -10,6 +10,7 @@ namespace UtilPlugin
 {
     public class BroadcastItem
     {
+        public bool showtime = false;
         public int time;
         public string prefix, text;
         public Func<Player, bool> Check;
@@ -42,14 +43,21 @@ namespace UtilPlugin
                     int remain = 3;
                     foreach (BroadcastItem item in globals)
                     {
-                        if (remain > 0) result += $"「{item.prefix}」:{item.text}[{item.time}]\n";
+                        if (remain > 0 && item.time > 0)
+                        {
+                            result += $"「{item.prefix}」:{item.text}";
+                            if (item.showtime) result += $"[{item.time}]";
+                            result += "\n";
+                        }
                         remain--;
                     }
                     foreach (BroadcastItem item in normals)
                     {
-                        if ((item.targets.Contains(player.UserId)) || (item.Check != null && item.Check(player)))
+                        if (item.time > 0 && remain > 0 && (item.targets.Contains(player.UserId) || (item.Check != null && item.Check(player))))
                         {
-                            result += $"「{item.prefix}」:{item.text}[{item.time}]\n";
+                            result += $"「{item.prefix}」:{item.text}";
+                            if (item.showtime) result += $"[{item.time}]";
+                            result += "\n";
                         }
                         remain--;
                     }
