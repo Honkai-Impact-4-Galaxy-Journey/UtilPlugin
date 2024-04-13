@@ -252,10 +252,10 @@ namespace UtilPlugin
             while(Flag)
             {
                 yield return Timing.WaitForSeconds(delay - 30);
-                PluginAPI.Core.Server.SendBroadcast("服务器将在30秒后清理掉落物和尸体", 10);
+                BroadcastMain.SendGlobalcast(new BroadcastItem { time = 10, prefix = "自动扫地机", priority = (byte)BroadcastPriority.Normal, text = "服务器将在20秒后清理地板" });
                 yield return Timing.WaitForSeconds(30);
                 CleanServer(true);
-                PluginAPI.Core.Server.SendBroadcast($"清理完成，下次清理将在{delay}秒后进行", 10);
+                BroadcastMain.SendGlobalcast(new BroadcastItem { time = 10, prefix = "自动扫地机", priority = (byte)BroadcastPriority.Normal, text = $"清理完成，下次清理将在{UtilPlugin.Instance.Config.Cleanuptime}后进行" });
             }
         }
 
