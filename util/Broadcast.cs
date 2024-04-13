@@ -11,6 +11,7 @@ namespace UtilPlugin
     public enum BroadcastPriority : byte { Lowest = 1, Lower = 50, Normal = 100, Higher = 150, Highest = 200, eme = 255}
     public class BroadcastItem
     {
+        public bool showtime = false;
         public int time;
         public string prefix, text;
         public Func<Player, bool> Check;
@@ -20,7 +21,10 @@ namespace UtilPlugin
         public static bool operator >(BroadcastItem lhs, BroadcastItem rhs) => lhs.priority > rhs.priority;
         public override string ToString()
         {
-            return $"<size=26>「{prefix}」:{text}[{time}]</size>";
+           string result = $"<size=26>「{prefix}」:{text}";
+           if (showtime) result += $"[{time}]</size>";
+           else result += "</size>";
+           return result;
         }
     }
     public class BroadcastMain
@@ -47,12 +51,15 @@ namespace UtilPlugin
                     int remain = 3;
                     foreach (BroadcastItem item in globals)
                     {
-                        if (remain > 0) result += $"{item}\n";
+                        if (remain > 0 && item.time > 0)
+                        {
+                            result += $"{item}\n";
+                        }
                         remain--;
                     }
                     foreach (BroadcastItem item in normals)
                     {
-                        if ((item.targets.Contains(player.UserId)) || (item.Check != null && item.Check(player)))
+                        if (item.time > 0 && remain > 0 && (item.targets.Contains(player.UserId) || (item.Check != null && item.Check(player))))
                         {
                             result += $"{item}\n";
                         }
