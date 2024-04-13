@@ -8,15 +8,20 @@ using System.Threading.Tasks;
 
 namespace UtilPlugin
 {
+    public enum BroadcastPriority : byte { Lowest = 1, Lower = 50, Normal = 100, Higher = 150, Highest = 200, eme = 255}
     public class BroadcastItem
     {
         public int time;
         public string prefix, text;
         public Func<Player, bool> Check;
-        public int priority;
+        public byte priority;
         public List<string> targets;
         public static bool operator <(BroadcastItem lhs, BroadcastItem rhs) => lhs.priority < rhs.priority;
-        public static bool operator >(BroadcastItem lhs, BroadcastItem rhs) => lhs.priority > rhs.priority; 
+        public static bool operator >(BroadcastItem lhs, BroadcastItem rhs) => lhs.priority > rhs.priority;
+        public override string ToString()
+        {
+            return $"<size=26>「{prefix}」:{text}[{time}]</size>";
+        }
     }
     public class BroadcastMain
     {
@@ -42,14 +47,14 @@ namespace UtilPlugin
                     int remain = 3;
                     foreach (BroadcastItem item in globals)
                     {
-                        if (remain > 0) result += $"「{item.prefix}」:{item.text}[{item.time}]\n";
+                        if (remain > 0) result += $"{item}\n";
                         remain--;
                     }
                     foreach (BroadcastItem item in normals)
                     {
                         if ((item.targets.Contains(player.UserId)) || (item.Check != null && item.Check(player)))
                         {
-                            result += $"「{item.prefix}」:{item.text}[{item.time}]\n";
+                            result += $"{item}\n";
                         }
                         remain--;
                     }
