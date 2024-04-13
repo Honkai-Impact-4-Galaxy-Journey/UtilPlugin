@@ -22,8 +22,9 @@ namespace UtilPlugin
         public override string ToString()
         {
            string result = $"<size=26>「{prefix}」:{text}";
-            if (showtime) result += $"[{time}]</size>";
-            else result += "</size>";
+           if (showtime) result += $"[{time}]</size>";
+           else result += "</size>";
+           return result;
         }
     }
     public class BroadcastMain
