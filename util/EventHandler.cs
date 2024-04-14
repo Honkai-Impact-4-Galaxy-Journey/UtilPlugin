@@ -44,7 +44,7 @@ namespace UtilPlugin
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundstart;
             Exiled.Events.Handlers.Scp330.InteractingScp330 += OnInteractingScp330;
             Exiled.Events.Handlers.Scp330.EatenScp330 += OnEatenScp330;
-            Exiled.Events.Handlers.Scp914.UpgradingPickup += OnUpgrading;
+            //Exiled.Events.Handlers.Scp914.UpgradingPickup += OnUpgrading;
             //Exiled.Events.Handlers.Warhead.Detonated += () => OmegaWarhead.ForceEnd = (Timing.RunCoroutine(OmegaWarhead.ForceEndRound()));
             Exiled.Events.Handlers.Map.Decontaminating += OnDecont;
             if (UtilPlugin.Instance.Config.MysqlEnabled)
