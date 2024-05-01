@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using MEC;
+using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace UtilPlugin
         public bool showtime = false;
         public int time;
         public string prefix, text;
-        public Func<Player, bool> Check;
+        public Func<RoleTypeId, bool> Check;
         public byte priority;
         public List<string> targets;
         public static bool operator <(BroadcastItem lhs, BroadcastItem rhs) => lhs.priority < rhs.priority;
@@ -48,7 +49,7 @@ namespace UtilPlugin
                 foreach (Player player in Player.List)
                 {
                     string result = "";
-                    int remain = 3;
+                    int remain = 5;
                     foreach (BroadcastItem item in globals)
                     {
                         if (remain > 0 && item.time > 0)
@@ -59,7 +60,7 @@ namespace UtilPlugin
                     }
                     foreach (BroadcastItem item in normals)
                     {
-                        if (item.time > 0 && remain > 0 && (item.targets.Contains(player.UserId) || (item.Check != null && item.Check(player))))
+                        if (item.time > 0 && remain > 0 && (item.targets.Contains(player.UserId) || (item.Check != null && item.Check(player.Role.Type))))
                         {
                             result += $"{item}\n";
                         }
