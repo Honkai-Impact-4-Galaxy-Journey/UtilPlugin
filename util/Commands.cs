@@ -2,9 +2,11 @@
 using CommandSystem;
 using Exiled.API.Features;
 using Google.Protobuf.WellKnownTypes;
+using Hints;
 using InventorySystem;
 using InventorySystem.Disarming;
 using MEC;
+using PlayerRoles;
 using SCPSLAudioApi.AudioCore;
 using System;
 using System.Collections.Generic;
@@ -487,6 +489,69 @@ namespace CommandSystem
                 }
             }
             return false;
+        }
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class Chat : ICommand
+    {
+        public string Command => "chat";
+
+        public string[] Aliases => new string[] { "c" };
+
+        public string Description => "阵营聊天";
+
+        public static bool Spectator(RoleTypeId id) => id == RoleTypeId.Spectator;
+
+        public static bool MTF(RoleTypeId id) => id == RoleTypeId.NtfSpecialist || id == RoleTypeId.NtfPrivate || id == RoleTypeId.NtfCaptain || id == RoleTypeId.NtfSergeant || id == RoleTypeId.FacilityGuard;
+
+        public static bool Chaos(RoleTypeId id) => id == RoleTypeId.ChaosConscript || id == RoleTypeId.ChaosRifleman || id == RoleTypeId.ChaosMarauder || id == RoleTypeId.ChaosRepressor;
+
+        public static bool Lights(RoleTypeId id) => id == RoleTypeId.ClassD || id == RoleTypeId.Scientist;
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = sender as Player;
+            BroadcastItem item = new BroadcastItem { prefix = "阵营聊天", priority = (byte)BroadcastPriority.Normal, text = $"[{player.DisplayNickname}:{arguments.At(0).Replace('|', ' ')}]", time = 10, showtime = true};
+            switch (player.Role.Team)
+            {
+                case Team.FoundationForces:
+                    item.Check += MTF;
+                    item.text = $"<color=cyan>{item.text}</color>";
+                    break;
+                case Team.ChaosInsurgency:
+                    item.Check += Chaos;
+                    item.text = $"<color=green>{item.text}</color>";
+                    break;
+                case Team.Scientists:
+                case Team.ClassD:
+                    item.Check += Lights;
+                    item.text = $"<color=yellow>{item.text}</color>";
+                    break;
+                case Team.Dead:
+                    item.Check += Spectator;
+                    break;
+            }
+            BroadcastMain.SendNormalCast(item);
+            response = "Done!";
+            return true;
+        }
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class Bchat : ICommand
+    {
+        public string Command => "globalchat";
+
+        public string[] Aliases => new string[] { "bc" };
+
+        public string Description => "全部聊天";
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            Player player = sender as Player;
+            BroadcastItem item = new BroadcastItem { prefix = "全局聊天", priority = (byte)BroadcastPriority.Normal, text = $"[{player.DisplayNickname}:{arguments.At(0).Replace('|', ' ')}]", time = 10, showtime = true };
+            BroadcastMain.SendGlobalcast(item);
+            response = "Done!";
+            return true;
         }
     }
 }
