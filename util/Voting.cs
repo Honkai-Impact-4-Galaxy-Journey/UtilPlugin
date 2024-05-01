@@ -135,7 +135,7 @@ namespace UtilPlugin
             while (time != 0)
             {
                 time--;
-                BroadcastMain.SendGlobalcast(new BroadcastItem { prefix = "投票", priority = (byte)BroadcastPriority.Higher, time = 1, text = $"{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(int)((double)AcceptPlayer.Count / (Server.PlayerCount) * 100)}%)[{time}]" }); 
+                BroadcastMain.SendGlobalcast(new BroadcastItem { prefix = "<color=yellow>投票</color>", priority = (byte)BroadcastPriority.Higher, time = 1, text = $"{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(int)((double)AcceptPlayer.Count / (Server.PlayerCount) * 100)}%)[{time}]" }); 
                 //PluginAPI.Core.Server.SendBroadcast($"<size=28>{player.Nickname}: 发起<color=yellow>{votingEvent.VotingDes}</color>的投票，使用.v ty同意，.v fd反对(<color=green>{AcceptPlayer.Count}</color>|<color=red>{AgainstPlayer.Count}</color>)({(int)((double)AcceptPlayer.Count / (Server.PlayerCount) * 100)}%)[{time}]</size>", 1, Broadcast.BroadcastFlags.Normal, true);
                 yield return Timing.WaitForSeconds(1f);
             }
