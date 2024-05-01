@@ -57,6 +57,7 @@ namespace UtilPlugin
         public static void ActivateOmega()
         {
             return;
+#pragma warning disable CS0162
             if (OmegaActivated)
             {
                 return;
@@ -134,6 +135,7 @@ namespace UtilPlugin
                     room.Color = Color.blue;
                 }
             }));
+#pragma warning restore CS0162
         }
     }
 }

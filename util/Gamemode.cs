@@ -27,7 +27,7 @@ namespace UtilPlugin
             switch (NextMode)
             {
                 case Gamemodes.Normal:
-                    PluginAPI.Core.Server.SendBroadcast("<size=26><color=red>「回合开始」</color>当前回合已经开始</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                    BroadcastMain.SendGlobalcast(new BroadcastItem { priority = (byte)BroadcastPriority.Normal, prefix = "<color=red>回合开始</color>", text = "当前回合已经开始", time = 5});
                     break;
                 case Gamemodes.Other:
                     PluginAPI.Core.Server.SendBroadcast("<size=26><color=red>「回合开始」</color>本局为娱乐模式</size>", 5, Broadcast.BroadcastFlags.Normal, true);
