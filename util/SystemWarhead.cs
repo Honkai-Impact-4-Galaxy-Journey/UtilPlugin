@@ -56,7 +56,7 @@ namespace UtilPlugin
         public static void OnRoundEnded(RoundEndedEventArgs roundEndedEventArgs)
         {
             Timing.CallDelayed(5, () => { Warhead.Detonate(); });
-            OmegaWarhead.StopOmega();
+            //OmegaWarhead.StopOmega();
         }
 
         public static void OnRoundFinished()
@@ -90,7 +90,7 @@ namespace UtilPlugin
             Warhead.IsLocked = true;
             if (sendbroadcast)
             {
-                PluginAPI.Core.Server.SendBroadcast(UtilPlugin.Instance.Config.SystemWarheadBroadcast, 10, Broadcast.BroadcastFlags.Normal, true);
+                BroadcastMain.SendGlobalcast(new BroadcastItem { prefix = "<color=red>系统核弹</color>", priority = (byte)BroadcastPriority.Higher, text = UtilPlugin.Instance.Config.SystemWarheadBroadcast, time = 10 });
             }
         }
     }
