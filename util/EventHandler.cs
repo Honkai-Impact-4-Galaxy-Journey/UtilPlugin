@@ -1,30 +1,20 @@
 ﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
-using Exiled.Events.EventArgs.Server;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using MEC;
 using Exiled.API.Features;
-using Exiled.Events.Commands.Reload;
 using InventorySystem.Items.Pickups;
-using InventorySystem.Items;
-using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Scp914;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles.Ragdolls;
 using Exiled.Events.EventArgs.Scp330;
 using System.Diagnostics;
-using Exiled.Events.Patches.Events.Scp330;
 using InventorySystem.Items.Usables.Scp330;
 using Exiled.API.Enums;
 using Exiled.Events.EventArgs.Map;
 using Exiled.API.Features.Doors;
 using Exiled.API.Interfaces;
-using LightContainmentZoneDecontamination;
 using UnityEngine;
 
 namespace UtilPlugin
