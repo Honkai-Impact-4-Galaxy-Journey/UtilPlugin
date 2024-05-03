@@ -72,7 +72,7 @@ namespace UtilPlugin
             }
             else
             {
-                //OmegaWarhead.ActivateOmega();
+                OmegaWarhead.ActivateOmega();
             }
         }
         public static void Detonate(bool sendbroadcast = true)
