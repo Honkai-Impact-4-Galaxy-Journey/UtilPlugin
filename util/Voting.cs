@@ -36,7 +36,7 @@ namespace UtilPlugin
             Timing.KillCoroutines(votingcoroutine);
             if (voting)
             {
-                BroadcastMain.SendGlobalcast(new BroadcastItem { priority = (byte)BroadcastPriority.Higher, time = 10 });
+                BroadcastMain.SendGlobalcast(new BroadcastItem { priority = (byte)BroadcastPriority.Higher, time = 5, prefix = "<color=red>投票失败</color>", text = "回合已结束" });
                 //PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>回合已结束</size>", 5, Broadcast.BroadcastFlags.Normal, true);
                 voting = false;
             }
@@ -47,7 +47,8 @@ namespace UtilPlugin
             if (voting)
             {
                 Timing.KillCoroutines(votingcoroutine);
-                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>管理员强制废除了此次投票</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                BroadcastMain.SendGlobalcast(new BroadcastItem { priority = (byte)BroadcastPriority.Higher, time = 5, prefix = "<color=red>投票失败</color>", text = "管理员强制废除了此次投票" });
+                //PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>管理员强制废除了此次投票</size>", 5, Broadcast.BroadcastFlags.Normal, true);
                 AcceptPlayer = new ConcurrentBag<string>();
                 AgainstPlayer = new ConcurrentBag<string>();
                 Timing.CallDelayed(90f, () => Canvote = true);
@@ -69,11 +70,13 @@ namespace UtilPlugin
             if (votingEvent.OnVotingEnded() || Accepted)
             {
                 votingEvent.Action();
-                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=green>「投票通过」</color>{votingEvent.AcceptBroadcast}</size>", 5, Broadcast.BroadcastFlags.Normal);
+                BroadcastMain.SendGlobalcast(new BroadcastItem { priority = (byte)BroadcastPriority.Higher, time = 5, prefix = "<color=green>投票通过</color>", text = $"{votingEvent.AcceptBroadcast}" });
+                //PluginAPI.Core.Server.SendBroadcast($"<size=24><color=green>「投票通过」</color>{votingEvent.AcceptBroadcast}</size>", 5, Broadcast.BroadcastFlags.Normal);
             }
             else
             {
-                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>没有足够玩家投票</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                BroadcastMain.SendGlobalcast(new BroadcastItem { priority = (byte)BroadcastPriority.Higher, time = 5, prefix = "<color=red>投票失败</color>", text = $"没有足够玩家投票" });
+                //PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>没有足够玩家投票</size>", 5, Broadcast.BroadcastFlags.Normal, true);
             }
             Accepted = false;
             AcceptPlayer = new ConcurrentBag<string>();
