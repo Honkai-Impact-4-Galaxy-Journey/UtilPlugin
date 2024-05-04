@@ -1,21 +1,11 @@
 ﻿//Copyright 2023 Silver Wolf,All Rights Reserved.
-using CommandSystem;
 using Exiled.API.Features;
-using Google.Protobuf.WellKnownTypes;
-using Hints;
 using InventorySystem;
-using InventorySystem.Disarming;
 using MEC;
 using PlayerRoles;
-using SCPSLAudioApi.AudioCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UtilPlugin;
-using Utils.Networking;
 using VoiceChat;
 
 namespace CommandSystem
@@ -123,10 +113,10 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Timing.KillCoroutines(UtilPlugin.EventHandler._cleanupcoroutine);
-            if (arguments.Count != 1 || arguments.At(0) != "false")
-            {
-                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的自动清理", 10);
-            }
+            //if (arguments.Count != 1 || arguments.At(0) != "false")
+            //{
+            //    PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的自动清理", 10);
+            //}
             response = "Done!";
             return true;
         }
@@ -144,10 +134,10 @@ namespace CommandSystem
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Timing.KillCoroutines(UtilPlugin.SystemWarhead._systemwarheadwaiter);
-            if (arguments.Count != 1 || arguments.At(0) != "false")
-            {
-                PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的系统核弹", 10);
-            }
+            //if (arguments.Count != 1 || arguments.At(0) != "false")
+            //{
+            //    PluginAPI.Core.Server.SendBroadcast($"管理员 {Player.Get((sender as CommandSender).SenderId).Nickname} 关闭了本局的系统核弹", 10);
+            //}
             response = "Done!";
             return true;
         }

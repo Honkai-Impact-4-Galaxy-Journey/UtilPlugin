@@ -12,6 +12,7 @@ namespace UtilPlugin
     public enum BroadcastPriority : byte { Lowest = 1, Lower = 50, Normal = 100, Higher = 150, Highest = 200, eme = 255}
     public class BroadcastItem
     {
+        public bool Noprefix = false;
         public bool showtime = false;
         public int time;
         public string prefix, text;
@@ -22,10 +23,12 @@ namespace UtilPlugin
         public static bool operator >(BroadcastItem lhs, BroadcastItem rhs) => lhs.priority > rhs.priority;
         public override string ToString()
         {
-           string result = $"<size=26>「{prefix}」:{text}";
-           if (showtime) result += $"[{time}]</size>";
-           else result += "</size>";
-           return result;
+             string result = "<size=26>";
+             if (!Noprefix) result += $"「{prefix}」:";
+             result += text;
+             if (showtime) result += $"[{time}]</size>";
+             else result += "</size>";
+             return result;
         }
     }
     public class BroadcastMain
