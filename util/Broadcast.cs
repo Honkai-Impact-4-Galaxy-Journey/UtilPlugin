@@ -23,7 +23,7 @@ namespace UtilPlugin
         public static bool operator >(BroadcastItem lhs, BroadcastItem rhs) => lhs.priority > rhs.priority;
         public override string ToString()
         {
-             string result = "";
+             string result = "<size=26>";
              if (!Noprefix) result += $"「{prefix}」:";
              result += text;
              if (showtime) result += $"[{time}]</size>";
