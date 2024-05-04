@@ -1,4 +1,6 @@
 # English - UtilPlugin
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FHonkai-Impact-4-Galaxy-Journey%2FUtilPlugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FHonkai-Impact-4-Galaxy-Journey%2FUtilPlugin?ref=badge_shield)
+
 
 a plugin with these functions:
 
@@ -54,3 +56,7 @@ Last, Place the UtilPlugin.dll in the %appdata%\Exiled\Plugins folder
 
 3.禁止使用本人（Kiana Kaslana, Silver Wolf, dargoncat）的名字来做宣传. (依据GPLv3,7.d)
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FHonkai-Impact-4-Galaxy-Journey%2FUtilPlugin.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FHonkai-Impact-4-Galaxy-Journey%2FUtilPlugin?ref=badge_large)
