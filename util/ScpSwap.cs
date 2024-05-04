@@ -3,8 +3,6 @@ using System;
 using Exiled.API.Features;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommandSystem;
 
 namespace UtilPlugin
@@ -33,7 +31,8 @@ namespace UtilPlugin
         }
         public static void SendMessage(string target, string origin)
         {
-            Player.Get(target).Broadcast(5, $"<size=24>「SCP交换」{Player.Get(origin).Role.Name}请求与你交换，输入.scp {Player.Get(origin).Role.Name}完成交换</size>", shouldClearPrevious: true);
+            BroadcastMain.SendNormalCast(new BroadcastItem { prefix = "SCP交换", priority = (byte)BroadcastPriority.Normal, targets = new List<string> { target }, time = 10, text = $"{Player.Get(origin).Role.Name}请求与你交换，输入.scp {Player.Get(origin).Role.Name}完成交换" });
+            //Player.Get(target).Broadcast(5, $"<size=24>「SCP交换」{Player.Get(origin).Role.Name}请求与你交换，输入.scp {Player.Get(origin).Role.Name}完成交换</size>", shouldClearPrevious: true);
         }
     }
     [CommandHandler(typeof(ClientCommandHandler))]
