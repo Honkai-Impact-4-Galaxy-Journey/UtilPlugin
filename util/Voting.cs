@@ -36,7 +36,8 @@ namespace UtilPlugin
             Timing.KillCoroutines(votingcoroutine);
             if (voting)
             {
-                PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>回合已结束</size>", 5, Broadcast.BroadcastFlags.Normal, true);
+                BroadcastMain.SendGlobalcast(new BroadcastItem { priority = (byte)BroadcastPriority.Higher, time = 10 });
+                //PluginAPI.Core.Server.SendBroadcast($"<size=24><color=red>「投票失败」</color>回合已结束</size>", 5, Broadcast.BroadcastFlags.Normal, true);
                 voting = false;
             }
         }
