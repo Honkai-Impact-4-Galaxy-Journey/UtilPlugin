@@ -7,6 +7,7 @@ a plugin with these functions:
 - voting
 - badge and reserveslots (based on MySQL)
 - omeganuke (have some bugs)
+- .bc and .c
 - some other funny things
 
 #### Note: At present, this plugin has not completed the translation, someone who is proficient in Chinese and English translation can help translate it, thank you（PR to the English branch plz）
