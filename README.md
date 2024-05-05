@@ -28,6 +28,7 @@ Last, Place the UtilPlugin.dll in the %appdata%\Exiled\Plugins folder
 - 投票
 - 称号和预留位系统（基于MySQL）
 - Omega核弹（有很多bug）
+- .bc 和 .c
 - 其他的一些乱七八糟的玩意
 
 #### 注意：这玩意还没翻译完，有精通中外语翻译的麻烦帮忙翻译成英语，谢谢(PR交到english分支里)
