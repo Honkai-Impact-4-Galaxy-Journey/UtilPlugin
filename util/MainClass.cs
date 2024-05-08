@@ -3,14 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Exiled;
-using Exiled.API;
 using Exiled.API.Features;
 using Exiled.API.Interfaces;
-using Exiled.Events;
 using PlayerRoles;
 
 namespace UtilPlugin
@@ -38,6 +32,8 @@ namespace UtilPlugin
         public bool ReserveSlotEnabled { get; set; } = false;
         [Description("管理员预留位数量")]
         public int Slots { get; set; } = 5;
+        [Description("是否判断预留位占用")]
+        public bool WhetherOccupieSlots {  get; set; } = false;
         [Description("系统核弹投票可发起时间(以秒为单位)")]
         public int SystemWarheadVoteTime { get; set; } = 720;
         [Description("预留位踢出理由")]
