@@ -33,8 +33,8 @@ namespace UtilPlugin
     }
     public class BroadcastMain
     {
-        public static List<BroadcastItem> globals;
-        public static List<BroadcastItem> normals;
+        public static List<BroadcastItem> globals = new List<BroadcastItem>;
+        public static List<BroadcastItem> normals = new List<BroadcastItem>;
         public static void SendGlobalcast(BroadcastItem item)
         {
             globals.Add(item);
