@@ -46,7 +46,6 @@ namespace CommandSystem
         }
 
     }
-    [CommandHandler(typeof(ClientCommandHandler))]
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Setbadge : ICommand, IUsageProvider
     {
@@ -398,24 +397,24 @@ namespace CommandSystem
             return true;
         }
     }
-    [CommandHandler(typeof(ClientCommandHandler))]
-    [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class ReloadBadge : ICommand
-    {
-        public string Command => "reloadbadge";
+    //[CommandHandler(typeof(ClientCommandHandler))]
+    //[CommandHandler(typeof(RemoteAdminCommandHandler))]
+    //public class ReloadBadge : ICommand
+    //{
+    //    public string Command => "reloadbadge";
 
-        public string[] Aliases => Array.Empty<string>();
+    //    public string[] Aliases => Array.Empty<string>();
 
-        public string Description => "";
+    //    public string Description => "";
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
-        {
-            if (arguments.Count == 0) BadgeDatabase.Update(); // 用于临时连接至另一台MySQL服务器，调试版
-            else BadgeDatabase.Update(arguments.At(0));
-            response = "Done!";
-            return true;
-        }
-    }
+    //    public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+    //    {
+    //        if (arguments.Count == 0) BadgeDatabase.Update(); // 用于临时连接至另一台MySQL服务器，调试版
+    //        else BadgeDatabase.Update(arguments.At(0));
+    //        response = "Done!";
+    //        return true;
+    //    }
+    //}
     [CommandHandler(typeof(ClientCommandHandler))]
     public class Callkick : ICommand
     {
