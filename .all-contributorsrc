@@ -1,4 +1,21 @@
 {
   "projectName": "UtilPlugin",
-  "projectOwner": "Honkai Impact 4: Galaxy Journey"
+  "projectOwner": "Honkai-Impact-4-Galaxy-Journey",
+  "files": [
+    "README.md"
+  ],
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributorsPerLine": 7,
+  "contributors": [
+    {
+      "login": "Sirin3rd",
+      "name": "空之律者西琳小天使",
+      "avatar_url": "https://avatars.githubusercontent.com/u/168607505?v=4",
+      "profile": "https://github.com/Sirin3rd",
+      "contributions": [
+        "code"
+      ]
+    }
+  ]
 }
