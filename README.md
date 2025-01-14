@@ -58,3 +58,14 @@ Last, Place the UtilPlugin.dll in the %appdata%\Exiled\Plugins folder
 
 3.禁止使用本人（Kiana Kaslana, Silver Wolf, dargoncat）的名字来做宣传. (依据GPLv3,7.d)
 
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
