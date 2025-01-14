@@ -64,6 +64,13 @@ Last, Place the UtilPlugin.dll in the %appdata%\Exiled\Plugins folder
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Sirin3rd"><img src="https://avatars.githubusercontent.com/u/168607505?v=4?s=100" width="100px;" alt="空之律者西琳小天使"/><br /><sub><b>空之律者西琳小天使</b></sub></a><br /><a href="#code-Sirin3rd" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
