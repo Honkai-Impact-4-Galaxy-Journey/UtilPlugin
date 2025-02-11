@@ -18,6 +18,7 @@
       ]
     },
     {
+
       "login": "Griseo-bh3rd",
       "name": "【繁星】格蕾修",
       "avatar_url": "https://avatars.githubusercontent.com/u/121101691?v=4",
@@ -26,6 +27,15 @@
         "code",
         "ideas",
         "maintenance"
+        ]
+    },
+    {
+      "login": "CN-hurui",
+      "name": "Ray",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57028271?v=4",
+      "profile": "https://github.com/CN-hurui",
+      "contributions": [
+        "bug"
       ]
     }
   ]
